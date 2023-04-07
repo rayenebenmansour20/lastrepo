@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../constants/constants.dart';
-
+//cv chwiya 
 class ReferalInfoModel {
   final String? svgSrc, title;
   final int? count;
