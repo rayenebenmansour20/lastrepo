@@ -147,8 +147,8 @@ class _SidemenuState extends State<Sidemenu> {
             ),
             Expanded(
               flex: 5,
-              child: Container(
-                child: page,
+              child: Scaffold(
+                body: page,
               ),
             ),
           ],
