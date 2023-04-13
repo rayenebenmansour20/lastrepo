@@ -8,6 +8,7 @@ class ProductInfo {
   final int? count;
   final Color? color;
   final Image? image;
+  final int? id;
 
   ProductInfo({
     this.svgSrc,
@@ -15,7 +16,10 @@ class ProductInfo {
     this.count,
     this.color,
     this.image,
+    this.id,
   });
+
+  get price => null;
 }
 
 class ProductInfoCard extends StatefulWidget {

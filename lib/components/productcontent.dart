@@ -1,5 +1,5 @@
 
-import 'package:newapp/components/bar_chart.dart';
+import 'package:newapp/components/vented%C3%A9tails.dart';
 import 'package:newapp/components/header.dart';
 import 'package:newapp/components/product_card.dart';
 import 'package:newapp/components/product_info_card.dart';
@@ -29,8 +29,8 @@ class _ProductContentState extends State<ProductContent>{
 
   @override
   Widget build(BuildContext context) {
-      return SafeArea(
-        child: SingleChildScrollView(
+      return Scaffold(
+        body: SingleChildScrollView(
           padding: const EdgeInsets.all(appPadding),
           child: Column(
             children: [

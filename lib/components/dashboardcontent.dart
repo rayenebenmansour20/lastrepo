@@ -1,6 +1,5 @@
-import 'dart:html';
 
-import 'package:newapp/components/bar_chart.dart';
+import 'package:newapp/components/vented%C3%A9tails.dart';
 import 'package:newapp/components/header.dart';
 import 'package:newapp/components/top_referal.dart';
 import 'package:newapp/components/viewers.dart';

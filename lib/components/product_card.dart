@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/constants.dart';
 import '../constants/responsive.dart';
+import 'productcarddetails.dart';
 
 class ProductCards extends StatefulWidget {
   const ProductCards({Key? key}) : super(key: key);
@@ -37,7 +38,6 @@ class _ProductCardsState extends State<ProductCards> {
   }) {
     // Calculate the start and end index of the current page
     int startIndex = _currentPage * 24;
-    int endIndex = startIndex + 24;
 
     // Get the items to display on the current page
     List<ProductInfo> items = analyticData
@@ -58,8 +58,18 @@ class _ProductCardsState extends State<ProductCards> {
             mainAxisSpacing: appPadding,
             childAspectRatio: childAspectRatio,
           ),
-          itemBuilder: (context, index) => ProductInfoCard(
-            info: items[index],
+          itemBuilder: (context, index) => GestureDetector(
+            onTap: (){
+              print("rayene");
+                /* Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => ProductDetailsScreen(product: items[index]),
+    ),
+  );*/
+            },
+            child: ProductInfoCard(
+              info: items[index],
+            ),
           ),
         ),
         SizedBox(height: appPadding),
@@ -97,20 +107,22 @@ class _ProductCardsState extends State<ProductCards> {
     );
   }
 }
-
+int ID=0;
 List<ProductInfo> analyticData = [
   ProductInfo(
     title: "Produit 1",
     count: 720,
     svgSrc: const Icon(Icons.people),
     color: primaryColor,
-    image: Image.asset("assets/images/javel-doz.png")
+    image: Image.asset("assets/images/javel-doz.png"),
+    id:ID++,
   ),
   ProductInfo(
     title: "Produit 1",
     count: 720,
     svgSrc: const Icon(Icons.people),
     color: primaryColor,
+    id:ID++,
   ),
   ProductInfo(
     title: "Produit 1",

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:newapp/components/commandespage/commandesview.dart';
 import 'package:newapp/components/dashboardcontent.dart';
 import 'package:newapp/components/productcontent.dart';
+import 'package:newapp/components/commandespage/commandesview.dart';
 
 class Sidemenu extends StatefulWidget {
   const Sidemenu({super.key});
@@ -24,7 +26,7 @@ class _SidemenuState extends State<Sidemenu> {
         page = const ProductContent();
         break;
       case 2:
-        page = const Placeholder();
+        page = const CommandesContent();
         break;
       case 3:
         page = const Placeholder();
@@ -148,7 +150,7 @@ class _SidemenuState extends State<Sidemenu> {
             Expanded(
               flex: 5,
               child: Scaffold(
-                body: page,
+                body:page,
               ),
             ),
           ],
