@@ -43,6 +43,9 @@ dependencies:
   image_picker: ^0.8.7+1
   image_cropper: ^3.0.2
   shared_preferences: ^2.1.0
+  multiselect_formfield: ^0.1.7
+  http: ^0.13.5
+  flutter_secure_storage: ^8.0.0
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +72,31 @@ flutter:
    - assets/
    - assets/images/
    - assets/icons/
+   - assets/fonts/static/
+   - assets/fonts/
+  fonts:
+    - family: Raleway
+      fonts:
+        - asset: assets/fonts/static/Raleway-Black.ttf
+        - asset: assets/fonts/static/Raleway-BlackItalic.ttf
+        - asset: assets/fonts/static/Raleway-Bold.ttf
+        - asset: assets/fonts/static/Raleway-BoldItalic.ttf
+        - asset: assets/fonts/static/Raleway-ExtraBold.ttf
+        - asset: assets/fonts/static/Raleway-ExtraBoldItalic.ttf
+        - asset: assets/fonts/static/Raleway-ExtraLight.ttf
+        - asset: assets/fonts/static/Raleway-ExtraLightItalic.ttf
+        - asset: assets/fonts/static/Raleway-Italic.ttf
+        - asset: assets/fonts/static/Raleway-Light.ttf
+        - asset: assets/fonts/static/Raleway-LightItalic.ttf
+        - asset: assets/fonts/static/Raleway-Medium.ttf
+        - asset: assets/fonts/static/Raleway-MediumItalic.ttf
+        - asset: assets/fonts/static/Raleway-Regular.ttf
+        - asset: assets/fonts/static/Raleway-SemiBold.ttf
+        - asset: assets/fonts/static/Raleway-SemiBoldItalic.ttf
+        - asset: assets/fonts/static/Raleway-Thin.ttf
+        - asset: assets/fonts/static/Raleway-ThinItalic.ttf
+        - asset: assets/fonts/Raleway-Italic-VariableFont_wght.ttf
+        - asset: assets/fonts/Raleway-VariableFont_wght.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

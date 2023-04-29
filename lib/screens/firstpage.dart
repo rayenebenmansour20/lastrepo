@@ -5,6 +5,7 @@ import '../controllers/sidemenucontroller.dart';
 import 'dashboard_screen.dart';
 
 
+// ignore: camel_case_types
 class firstpageversion extends StatefulWidget {
   const firstpageversion({super.key});
 
@@ -12,6 +13,7 @@ class firstpageversion extends StatefulWidget {
   State<firstpageversion> createState() => _firstpageversionState();
 }
 
+// ignore: camel_case_types
 class _firstpageversionState extends State<firstpageversion> {
   // This widget is the root of your application.
   @override

@@ -1,30 +1,24 @@
 
-import 'package:newapp/components/vented%C3%A9tails.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
+import 'package:newapp/components/produitspage/listproduit.dart';
 import 'package:newapp/components/header.dart';
-import 'package:newapp/components/product_card.dart';
-import 'package:newapp/components/product_info_card.dart';
-import 'package:newapp/components/top_referal.dart';
+import 'package:newapp/components/produitspage/product_card.dart';
 import 'package:flutter/material.dart';
 
-import '../constants/constants.dart';
-import '../constants/responsive.dart';
+import '../../constants/constants.dart';
+import '../../constants/responsive.dart';
 
 class ProductContent extends StatefulWidget {
   const ProductContent({Key? key}) : super(key: key);
   
   @override
+  // ignore: library_private_types_in_public_api
   _ProductContentState createState()=> _ProductContentState(); 
 }
 
 class _ProductContentState extends State<ProductContent>{
   bool _showBarChart = true;
 
-  void _toggleChart(){
-    setState((){
-      _showBarChart = ! _showBarChart;
-    }
-    );
-  }
 
 
   @override
@@ -70,39 +64,56 @@ class _ProductContentState extends State<ProductContent>{
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Dialog(
-            child: Container(
-              padding: EdgeInsets.all(16),
-              child: ListView(
-                children: [
-                  ListTile(
-                    title: Text('Input 1'),
-                    subtitle: Text('Description of input 1'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      // Handle input 1 tap
-                    },
-                  ),
-                  ListTile(
-                    title: Text('Input 2'),
-                    subtitle: Text('Description of input 2'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      // Handle input 2 tap
-                    },
-                  ),
-                  ListTile(
-                    title: Text('Input 3'),
-                    subtitle: Text('Description of input 3'),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      // Handle input 3 tap
-                    },
-                  ),
-                ],
-              ),
+           return Dialog(
+  child: Container(
+    constraints: const BoxConstraints(maxWidth: 300),
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        MultiSelectFormField(
+          title: const Text('Select inputs'),
+          dataSource: const [
+            {'display': 'Input 1', 'value': 'input_1'},
+            {'display': 'Input 2', 'value': 'input_2'},
+            {'display': 'Input 3', 'value': 'input_3'},
+          ],
+          textField: 'display',
+          valueField: 'value',
+          okButtonLabel: 'OK',
+          cancelButtonLabel: 'CANCEL',
+          //hintText: 'Select inputs',
+          initialValue: const [], // set initial value here
+          onSaved: (value) {
+            // Handle selected inputs
+          },
+        ),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text('Trier'),
+              onPressed: () {
+                // Handle OK button tap
+              },
             ),
-          );
+            const SizedBox(width:8),
+            ElevatedButton(
+              onPressed: () {
+                // Handle CANCEL button tap
+              },
+              style: ElevatedButton.styleFrom(
+               backgroundColor:Colors.white),
+              child: const Text('Annuler',style: TextStyle(color: Colors.black),),
+            ),
+          ],
+        ),
+      ],
+    ),
+  ),
+);
         },
       );
     },
@@ -130,7 +141,7 @@ class _ProductContentState extends State<ProductContent>{
                             if(_showBarChart)
                             const ProductCards(),
                             if(!_showBarChart)
-                            const TopReferals(),
+                            const Produitliste(),
                             if (Responsive.isMobile(context))
                               const SizedBox(
                                 height: appPadding,

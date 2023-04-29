@@ -112,12 +112,12 @@ class _TicketiconState extends State<Ticketicon> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('RayeneBen'),//nom du profil
+          title: const Text('RayeneBen'),//nom du profil
           actions: <Widget>[
             Center(
               child:TextButton(
               style: TextButton.styleFrom(foregroundColor:Colors.blue), 
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -152,18 +152,18 @@ class _TicketiconState extends State<Ticketicon> {
   ),
 )
 ),
-SizedBox(width: 5,),
+const SizedBox(width: 5,),
         GestureDetector(
   onTap: () {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Hello'),
-          content: Text('You tapped the image!'),
+          title: const Text('Hello'),
+          content: const Text('You tapped the image!'),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -196,41 +196,43 @@ SizedBox(width: 5,),
   ),
 )
 ),
-SizedBox(width: 5,),
+const SizedBox(width: 5,),
           GestureDetector(
           onTap: () async {
             await showDialog(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text('Select an image'),
+                  title: const Text('Select an image'),
                   content: _imageUrl != null
                       ? Image.network(_imageUrl!)
-                      : Text('No image selected'),
+                      : const Text('No image selected'),
                   actions: <Widget>[
                     TextButton(
-                      child: Text('Cancel'),
+                      child: const Text('Cancel'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
                     TextButton(
-                      child: Text('Gallery'),
+                      child: const Text('Gallery'),
                       onPressed: () async {
                         await _pickImage(ImageSource.gallery);
+                        // ignore: use_build_context_synchronously
                         Navigator.of(context).pop();
                       },
                     ),
                     TextButton(
-                      child: Text('Camera'),
                       style: TextButton.styleFrom(
                         // ignore: deprecated_member_use
                         primary: Colors.blue
                       ),
                       onPressed: () async {
                         await _pickImage(ImageSource.camera);
+                        // ignore: use_build_context_synchronously
                         Navigator.of(context).pop();
                       },
+                      child: const Text('Camera'),
                     ),
                   ],
                 );
@@ -242,8 +244,8 @@ SizedBox(width: 5,),
             radius: 20,
             backgroundImage: _imageUrl != null
                 ? NetworkImage(_imageUrl!) as ImageProvider
-                : AssetImage("assets/images/rayeneben.png"),
-            child: Stack(
+                : const AssetImage("assets/images/rayeneben.png"),
+            child: const Stack(
               children: [
                 Positioned(
                   right: 1,

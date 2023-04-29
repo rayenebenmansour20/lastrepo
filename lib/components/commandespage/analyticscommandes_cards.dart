@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../constants/constants.dart';
 import '../../constants/responsive.dart';
-import '../analytic_info_card.dart';
 import 'analyticscommandesinfo_card.dart';
 
 class AnalyticcommandeCards extends StatelessWidget {
@@ -56,28 +55,23 @@ class AnalyticInfoCardGridView extends StatelessWidget {
 
 List analyticData = [
   AnalyticcommandeInfo(
-    title: "Produit 1",
+    title: "Total commandes",
     count: 720,
     svgSrc: const Icon(Icons.abc_rounded),
     color: primaryColor,
   ),
 
   AnalyticcommandeInfo(
-    title: "Produit 2",
+    title: "Commandes payés",
     count: 820,
     svgSrc: const Icon(Icons.post_add),
     color:Colors.red,
   ),
   AnalyticcommandeInfo(
-    title: "Produit 3",
+    title: "Commandes non payés",
     count: 920,
     svgSrc: const Icon(Icons.pages),
     color: orange,
   ),
-  AnalyticcommandeInfo(
-    title: "Produit 4",
-    count: 920,
-    svgSrc: const Icon(Icons.comment),
-    color: green,
-  ),
+  
 ];

@@ -1,5 +1,9 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:newapp/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 import '../constants/constants.dart';
 import '../constants/responsive.dart';
@@ -18,16 +22,43 @@ class loginpageversion extends StatefulWidget {
 }
 
 
-
 // ignore: camel_case_types
 class _loginpageversionState extends State<loginpageversion> {
   bool _obscureText = true;
+    final _formKey = GlobalKey<FormState>();
+    final _emailController = TextEditingController();
+    final _passwordController = TextEditingController();
+
+
+  
 
   void _togglePasswordVisibility() {
     setState(() {
       _obscureText = !_obscureText;
     });
   }
+
+  Future<bool> _login() async {
+  final response = await http.post(
+    Uri.parse('http://51.178.142.70:8010/DMERP/v1/auth/login/'),
+    body: {
+      'email': _emailController.text,
+      'password': _passwordController.text,
+    },
+  );
+  if (response.statusCode == 200) {
+    var data = jsonDecode(response.body.toString());
+    print(data['access_token']);
+    print('success');
+    return true;
+  } else {
+    print('refus');
+    return false;
+  }
+}
+
+
+
   @override
   Widget build(BuildContext context) {
      double height = MediaQuery.of(context).size.height;
@@ -46,7 +77,7 @@ class _loginpageversionState extends State<loginpageversion> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 15, 0,15),
           child: Container(
-                padding:EdgeInsets.all(0),
+                padding:const EdgeInsets.all(0),
                 height: height,
                 width: width/3,
                 margin: EdgeInsets.symmetric(horizontal: Responsive.isMobile(context)? height * 0.032 : height * 0.12),
@@ -54,6 +85,9 @@ class _loginpageversionState extends State<loginpageversion> {
                   color: appcolors.backColor,
                  borderRadius: BorderRadius.circular(20), // add border radius
                   ),
+                  child:Form(
+                    key:_formKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -77,6 +111,13 @@ class _loginpageversionState extends State<loginpageversion> {
                           color: appcolors.whiteColor,
                         ),
                         child: TextFormField(
+                          controller: _emailController,
+                         validator: (value){
+                          if ( value == null || value.isEmpty){
+                            return 'Veuillez entre votre email';
+                          }
+                          return null;
+                         },
                           style: ralewayStyle.copyWith(
                             fontWeight: FontWeight.w400,
                             color: appcolors.blueDarkColor,
@@ -97,7 +138,7 @@ class _loginpageversionState extends State<loginpageversion> {
                                IconButton(
                                 onPressed: () {},
                                  icon: ColorFiltered(
-                                 colorFilter: ColorFilter.mode(
+                                 colorFilter: const ColorFilter.mode(
                                   Colors.white, 
                                  BlendMode.srcIn
                                  ),
@@ -107,7 +148,7 @@ class _loginpageversionState extends State<loginpageversion> {
                                   ],
                                 ) ,
 
-                            contentPadding: const EdgeInsets.only(top: 16.0,left: 36),
+                            contentPadding: const EdgeInsets.only(top: 16.0,left: 16),
                             hintText: 'Entrer votre email',
                             hintStyle: ralewayStyle.copyWith(
                               fontWeight: FontWeight.w400,
@@ -130,7 +171,13 @@ class _loginpageversionState extends State<loginpageversion> {
                           color: appcolors.whiteColor,
                         ),
                         child: TextFormField(
-
+                          controller: _passwordController,
+                          validator: (value){
+                            if (value == null || value.isEmpty){
+                              return 'Veuillez entre votre mot de passe';
+                            }
+                            return null;
+                          },
                           style: ralewayStyle.copyWith(
                             fontWeight: FontWeight.w400,
                             color: appcolors.blueDarkColor,
@@ -163,7 +210,7 @@ class _loginpageversionState extends State<loginpageversion> {
                                IconButton(
                                 onPressed: () {},
                                  icon: ColorFiltered(
-                                 colorFilter: ColorFilter.mode(
+                                 colorFilter: const ColorFilter.mode(
                                   Colors.white, 
                                  BlendMode.srcIn
                                  ),
@@ -185,44 +232,57 @@ class _loginpageversionState extends State<loginpageversion> {
                       ),
                       ),
                       SizedBox(height: height * 0.05),
-                      Material(
-                        child: InkWell(
-                          onTap: (){
-                            Navigator.push(context
-                            , MaterialPageRoute(builder: (context)=>DashBoardScreen()));
-                          },
-                          child: Center(
-                          child: Ink(
-                            height: 43,
-                            width:width/4,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.0),
-                              color: primaryColor,
-                            ),
-                            child: Center(
-                            child: Text('LOGIN',
-                              style: ralewayStyle.copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: appcolors.whiteColor,
-                                fontSize: 15.0,
-                              ),
-                               ),
-                            ),
-                          ),
-                          ),
-                          ),
-                        ),
+                     Material(
+  child: InkWell(
+    onTap: () async {
+      bool isLoggedIn = await _login();
+      if (isLoggedIn) {
+        // do something if login was successful
+         // ignore: use_build_context_synchronously
+         Navigator.push(context, MaterialPageRoute(builder: (context) => const DashBoardScreen()));
+      } else {
+        // do something else if login was not successful
+        // e.g. show an error message
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Echec de la connexion. Veuillez réessayer.'),
+        ));
+      }
+    },
+    child: Center(
+      child: Ink(
+        height: 43,
+        width: width / 4,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4.0),
+          color: primaryColor,
+        ),
+        child: Center(
+          child: Text(
+            'LOGIN',
+            style: ralewayStyle.copyWith(
+              fontWeight: FontWeight.w800,
+              color: appcolors.whiteColor,
+              fontSize: 15.0,
+            ),
+          ),
+        ),
+      ),
+    ),
+  ),
+),
+
                    Center(
                      child: Row(
                      mainAxisAlignment: MainAxisAlignment.center,
                      children: [
-                              Text(
+                              const Text(
                             'Copyright 2023',
                              style: TextStyle(
                              color: Colors.black,
                                ),
                                 ),
-                                 SizedBox(width:10,),
+                                 const SizedBox(width:10,),
                              Image.asset(
                                'assets/images/datamasterpetitlogo.png', // replace with your logo image path
                                 width: 100,
@@ -232,6 +292,7 @@ class _loginpageversionState extends State<loginpageversion> {
                               ),
                             ),
                     ],
+                  ),
                   ),
               ),
           ),

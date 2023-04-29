@@ -25,6 +25,7 @@ class ReferalInfoDetail extends StatelessWidget {
 
   final ReferalInfoModel info;
 
+
   @override
   Widget build(BuildContext context) {
     return Container(

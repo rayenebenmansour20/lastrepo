@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
 import '../../constants/constants.dart';
 
-//cv chwiya 
 class ReferalInfoModel {
   final String? svgSrc, title;
   final int? count;
@@ -21,59 +18,75 @@ class ReferalInfoModel {
   });
 }
 
-class commandelisteDetail extends StatelessWidget {
+// ignore: camel_case_types
+class commandelisteDetail extends StatefulWidget {
   const commandelisteDetail({Key? key, required this.info}) : super(key: key);
 
-  final ReferalInfoModel info;
+  final List<ReferalInfoModel> info;
 
   @override
+  State<commandelisteDetail> createState() => _commandelisteDetailState();
+}
+
+// ignore: camel_case_types
+class _commandelisteDetailState extends State<commandelisteDetail> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: appPadding),
-      padding: const EdgeInsets.all(appPadding / 2),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(appPadding / 1.5),
-            height: 40,
-            width: 40,
-            decoration: BoxDecoration(
-              color: info.color!.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: SvgPicture.asset(
-              info.svgSrc!,
-              // ignore: deprecated_member_use
-              color: info.color!,
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: appPadding),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    info.title!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: textColor,
-                    ),
-                  ),
-                  Text(
-                    '${info.count!}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: textColor,
-                    ),
-                  ),
-                ],
+    return DataTable(
+      columns: const [
+        DataColumn(label: Text('Title')),
+        DataColumn(label: Text('Count')),
+        DataColumn(label: Text('Category')),
+        DataColumn(label: Text('Quantity')),
+      ],
+      rows: widget.info.map((info) {
+        return DataRow(
+          cells: [
+            DataCell(
+  Row(
+    children: [
+      Text(
+        info.title!,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+          color: textColor,
+        ),
+      ),
+    ],
+  ),
+),
+
+            DataCell(
+              Text(
+                '${info.count!}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
               ),
             ),
-          )
-        ],
-      ),
+            DataCell(
+              Text(
+                info.categorie!,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
+              ),
+            ),
+            DataCell(
+              Text(
+                '${info.quantite!}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
+              ),
+            ),
+          ],
+        );
+      }).toList(),
     );
   }
 }

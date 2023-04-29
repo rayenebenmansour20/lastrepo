@@ -156,7 +156,7 @@ class _ViewLineChartState extends State<ViewLineChart> {
       ),
       borderData: FlBorderData(
         show: false,
-        border: Border.all(color: Color.fromARGB(255, 21, 169, 26)),
+        border: Border.all(color: const Color.fromARGB(255, 21, 169, 26)),
       ),
       minX: 0,
       maxX: 11,
@@ -205,13 +205,13 @@ class _ViewLineChartState extends State<ViewLineChart> {
         horizontalInterval: 1,
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: Color.fromARGB(255, 11, 118, 206),
+            color: const Color.fromARGB(255, 11, 118, 206),
             strokeWidth: 1,
           );
         },
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: Color.fromARGB(255, 11, 123, 214),
+            color: const Color.fromARGB(255, 11, 123, 214),
             strokeWidth: 1,
           );
         },
@@ -243,7 +243,7 @@ class _ViewLineChartState extends State<ViewLineChart> {
       ),
       borderData: FlBorderData(
         show: true,
-        border: Border.all(color: Color.fromARGB(255, 241, 43, 43)),
+        border: Border.all(color: const Color.fromARGB(255, 241, 43, 43)),
       ),
       minX: 0,
       maxX: 11,

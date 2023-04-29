@@ -14,18 +14,14 @@ class DashboardContent extends StatefulWidget {
   const DashboardContent({Key? key}) : super(key: key);
   
   @override
+  // ignore: library_private_types_in_public_api
   _DashboardContentState createState()=> _DashboardContentState(); 
 }
 
 class _DashboardContentState extends State<DashboardContent>{
   bool _showBarChart = true;
 
-  void _toggleChart(){
-    setState((){
-      _showBarChart = ! _showBarChart;
-    }
-    );
-  }
+
 
 
   @override
@@ -94,8 +90,8 @@ class _DashboardContentState extends State<DashboardContent>{
                                  Expanded(
                                   flex: 5,
                                   child: _showBarChart
-                                  ? BarChartSample3()
-                                  : TopReferals(),
+                                  ? const BarChartSample3()
+                                  : const TopReferals(),
                                 ),
                             ],
                           ),
@@ -152,7 +148,7 @@ class _DashboardContentState extends State<DashboardContent>{
                             const SizedBox(
                               height: appPadding,
                             ),
-                          if (Responsive.isMobile(context)) TopReferals(),
+                          if (Responsive.isMobile(context)) const TopReferals(),
                           if (Responsive.isMobile(context))
                             const SizedBox(
                               height: appPadding,

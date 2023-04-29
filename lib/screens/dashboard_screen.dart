@@ -1,9 +1,6 @@
-import 'package:newapp/components/dashboardcontent.dart';
-import 'package:newapp/components/productcontent.dart';
 import 'package:newapp/components/sidemenu.dart';
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
 
 import '../constants/constants.dart';
 import '../constants/responsive.dart';
@@ -12,6 +9,7 @@ class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _DashBoardScreenState createState() => _DashBoardScreenState();
 }
 

@@ -1,5 +1,4 @@
 
-import 'package:flutter/material.dart';
 
 class AppIcons {
   static const String emailIcon = 'assets/icons/email.png';

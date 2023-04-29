@@ -1,4 +1,4 @@
-import 'package:newapp/components/productcontent.dart';
+import 'package:newapp/components/produitspage/productcontent.dart';
 import 'package:flutter/material.dart';
 
 

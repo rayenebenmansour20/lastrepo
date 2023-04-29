@@ -1,9 +1,8 @@
-import 'package:newapp/components/product_info_card.dart';
+import 'package:newapp/components/produitspage/product_info_card.dart';
 import 'package:flutter/material.dart';
 
-import '../constants/constants.dart';
-import '../constants/responsive.dart';
-import 'productcarddetails.dart';
+import '../../constants/constants.dart';
+import '../../constants/responsive.dart';
 
 class ProductCards extends StatefulWidget {
   const ProductCards({Key? key}) : super(key: key);
@@ -60,7 +59,6 @@ class _ProductCardsState extends State<ProductCards> {
           ),
           itemBuilder: (context, index) => GestureDetector(
             onTap: (){
-              print("rayene");
                 /* Navigator.of(context).push(
     MaterialPageRoute(
       builder: (context) => ProductDetailsScreen(product: items[index]),
@@ -72,7 +70,7 @@ class _ProductCardsState extends State<ProductCards> {
             ),
           ),
         ),
-        SizedBox(height: appPadding),
+        const SizedBox(height: appPadding),
         _buildPagination(),
       ],
     );
@@ -83,7 +81,7 @@ class _ProductCardsState extends State<ProductCards> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: _currentPage == 0
               ? null
               : () {
@@ -94,7 +92,7 @@ class _ProductCardsState extends State<ProductCards> {
         ),
         Text('${_currentPage + 1} / $_totalPages'),
         IconButton(
-          icon: Icon(Icons.arrow_forward_ios),
+          icon: const Icon(Icons.arrow_forward_ios),
           onPressed: _currentPage == _totalPages - 1
               ? null
               : () {
@@ -107,7 +105,7 @@ class _ProductCardsState extends State<ProductCards> {
     );
   }
 }
-int ID=0;
+var ID=0;
 List<ProductInfo> analyticData = [
   ProductInfo(
     title: "Produit 1",

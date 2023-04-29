@@ -37,39 +37,32 @@ class AnalyticInfocommandeCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "${info.count}",
-                style: const TextStyle(
-                  color: textColor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(appPadding / 2),
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: info.color!.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: info.svgSrc,
-              )
-            ],
-          ),
-          Text(
+           Align(
+            alignment: Alignment.center,
+          child:Text(
             info.title!,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: textColor,
-              fontSize: 15,
+              fontSize: 25,
               fontWeight: FontWeight.w600,
             ),
-          )
+          ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+             Text(
+                "${info.count}",
+                style: const TextStyle(
+                  color: textColor,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:newapp/components/clientspage/clientcontent.dart';
 import 'package:newapp/components/commandespage/commandesview.dart';
 import 'package:newapp/components/dashboardcontent.dart';
-import 'package:newapp/components/productcontent.dart';
-import 'package:newapp/components/commandespage/commandesview.dart';
+import 'package:newapp/components/historiquepage/historiquecontent.dart';
+import 'package:newapp/components/produitspage/productcontent.dart';
+import 'package:newapp/components/settingspage/settingcontent.dart';
+import 'package:newapp/components/stockpage/stockcontent.dart';
 
 class Sidemenu extends StatefulWidget {
   const Sidemenu({super.key});
@@ -29,16 +32,16 @@ class _SidemenuState extends State<Sidemenu> {
         page = const CommandesContent();
         break;
       case 3:
-        page = const Placeholder();
+        page = const ClientContent();
         break;
       case 4:
-        page = const Placeholder();
+        page = const StockContent();
         break;
       case 5:
-        page = const Placeholder();
+        page = const HistoriqueContent();
         break;
       case 6:
-        page = const Placeholder();
+        page = const SettingsContent();
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');

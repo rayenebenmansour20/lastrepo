@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: camel_case_types
 class appcolors{
   static const Color backColor = Color(0xffF6F6F6);
   static const Color mainBlueColor = Color(0xff005BE0);
