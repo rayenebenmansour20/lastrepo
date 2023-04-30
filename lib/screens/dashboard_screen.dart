@@ -22,11 +22,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       key: _scaffoldKey,
       backgroundColor: bgColor,
       drawer: const Sidemenu(),
-      body: SafeArea(
+      body: const SafeArea(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (Responsive.isDesktop(context)) const Expanded(child: Sidemenu()),
+             Expanded(child: Sidemenu()),
             /*if (Responsive.isMobile(context))
               Container(
                 margin: const EdgeInsets.only(top: 18.0),

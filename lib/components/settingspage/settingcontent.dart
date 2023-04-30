@@ -36,119 +36,118 @@ class _SettingsContentState extends State<SettingsContent> {
               ),
             ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: appPadding,
-                  vertical: appPadding / 2,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white54,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.all(appPadding),
-                          child:ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                          child: Drawer(
-                            backgroundColor: Colors.white,
-                            child: ListView(
-                              children: [
-                                const SizedBox(height:appPadding),
-                      DrawerListTile(
-                        title: "Profil",
-                        svgSrc: "./assets/icons/useravatar.svg",
-                        press: () {
-                          setState(() {
-                            selectedIndex = 0;
-                          });
-                        },
-                        selected: selectedIndex == 0,
-                      ),
-                      DrawerListTile(
-                        title: "Notifications",
-                        svgSrc: "./assets/icons/notifications.svg",
-                        press: () {
-                          setState(() {
-                            selectedIndex = 1;
-                          });
-                        },
-                        selected: selectedIndex == 1,
-                      ),
-                      DrawerListTile(
-                        title: "Langue",
-                        svgSrc: "./assets/icons/globe.svg",
-                        press: () {
-                          setState(() {
-                            selectedIndex = 2;
-                          });
-                        },
-                        selected: selectedIndex == 2,
-                      ),
-                      DrawerListTile(
-                        title: "Aide",
-                        svgSrc: "./assets/icons/help.svg",
-                        press: () {
-                          setState(() {
-                            selectedIndex = 3;
-                          });
-                        },
-                        selected: selectedIndex == 3,
-                      ),
-                      DrawerListTile(
-                        title: "A propos",
-                        svgSrc: "./assets/icons/about.svg",
-                        press: () {
-                          setState(() {
-                            selectedIndex = 4;
-                          });
-                        },
-                        selected: selectedIndex == 4,
-                      ),
-                    ],
-                            ),
-                          ),
-                          ),
-                        ),
-                      ),
-                     Expanded(
-  flex: 3,
+  flex: 1,
   child: Padding(
     padding: const EdgeInsets.all(appPadding),
     child: Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 225, 222, 222),
+        color: Colors.white54,
         borderRadius: BorderRadius.circular(16),
       ),
-      child: PageView.builder(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return const ProfileSettingsPage();
-          } else if (index == 1) {
-            return const ProfileSettingsPage();
-          }
-          return null;
-        },
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Drawer(
+                backgroundColor: Colors.white,
+                child: ListView(
+                  children: [
+                    const SizedBox(height:appPadding),
+                    DrawerListTile(
+                      title: "Profil",
+                      svgSrc: "./assets/icons/useravatar.svg",
+                      press: () {
+                        setState(() {
+                          selectedIndex = 0;
+                        });
+                      },
+                      selected: selectedIndex == 0,
+                    ),
+                    DrawerListTile(
+                      title: "Notifications",
+                      svgSrc: "./assets/icons/notifications.svg",
+                      press: () {
+                        setState(() {
+                          selectedIndex = 1;
+                        });
+                      },
+                      selected: selectedIndex == 1,
+                    ),
+                    DrawerListTile(
+                      title: "Langue",
+                      svgSrc: "./assets/icons/globe.svg",
+                      press: () {
+                        setState(() {
+                          selectedIndex = 2;
+                        });
+                      },
+                      selected: selectedIndex == 2,
+                    ),
+                    DrawerListTile(
+                      title: "Aide",
+                      svgSrc: "./assets/icons/help.svg",
+                      press: () {
+                        setState(() {
+                          selectedIndex = 3;
+                        });
+                      },
+                      selected: selectedIndex == 3,
+                    ),
+                    DrawerListTile(
+                      title: "A propos",
+                      svgSrc: "./assets/icons/about.svg",
+                      press: () {
+                        setState(() {
+                          selectedIndex = 4;
+                        });
+                      },
+                      selected: selectedIndex == 4,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(appPadding),
+              child: Container(
+                constraints: BoxConstraints(
+                  minWidth: 200, // specify the minimum width
+                  maxWidth: 500, // specify the maximum width
+                ),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 225, 222, 222),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return const ProfileSettingsPage();
+                    } else if (index == 1) {
+                      return const ProfileSettingsPage();
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     ),
   ),
 ),
 
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:newapp/components/clientspage/clientcontent.dart';
 import 'package:newapp/components/commandespage/commandesview.dart';
 import 'package:newapp/components/dashboardcontent.dart';
 import 'package:newapp/components/historiquepage/historiquecontent.dart';
+import 'package:newapp/components/loginpageauth.dart';
 import 'package:newapp/components/produitspage/productcontent.dart';
 import 'package:newapp/components/settingspage/settingcontent.dart';
 import 'package:newapp/components/stockpage/stockcontent.dart';
@@ -43,6 +44,7 @@ class _SidemenuState extends State<Sidemenu> {
       case 6:
         page = const SettingsContent();
         break;
+ 
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }

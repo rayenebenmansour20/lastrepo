@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:newapp/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -48,14 +49,19 @@ class _loginpageversionState extends State<loginpageversion> {
   );
   if (response.statusCode == 200) {
     var data = jsonDecode(response.body.toString());
-    print(data['access_token']);
-    print('success');
+    String accessToken = data['access_token'];
+    print(accessToken);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('access_token', accessToken);
+    print ('success');
     return true;
   } else {
     print('refus');
     return false;
   }
 }
+
+// ignore: unused_elem
 
 
 
