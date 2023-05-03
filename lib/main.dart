@@ -1,26 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:newapp/components/loginpageauth.dart';
+import 'package:newapp/provider/auth_provider.dart';
+import 'package:newapp/provider/db_provider.dart';
+import 'package:newapp/splash.dart';
+import 'package:provider/provider.dart';
 
-import 'components/loginpage.dart';
+import 'constants/constants.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const App());
 }
-//ewa kich l'affaire
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
-  // This widget is the root of your application.
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Responsive Admin Dashboard',  
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
+        ChangeNotifierProvider(create: (_) => DatabaseProvider()),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+            appBarTheme: const AppBarTheme(
+              color: primaryColor,
+            ),
+            floatingActionButtonTheme:
+                const FloatingActionButtonThemeData(backgroundColor: primaryColor),
+            primaryColor: primaryColor),
+        home: const SplashScreen(),
       ),
-      home:   const loginpageversion(),
     );
   }
 }
-

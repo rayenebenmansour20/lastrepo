@@ -21,12 +21,16 @@ class _SettingsContentState extends State<SettingsContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Header(),
             const Padding(
-              padding:  EdgeInsets.all(appPadding),
+            padding: EdgeInsets.only(top:appPadding,left:appPadding,right:appPadding),
+            child: Header(),
+            ),
+            const Padding(
+              padding:  EdgeInsets.only(left:appPadding),
               child: Text(
                 'Paramètres',
                 style: TextStyle(
@@ -67,7 +71,7 @@ class _SettingsContentState extends State<SettingsContent> {
                     ),
                     DrawerListTile(
                       title: "Notifications",
-                      svgSrc: "./assets/icons/notifications.svg",
+                      svgSrc: "./assets/icons/notifications1.svg",
                       press: () {
                         setState(() {
                           selectedIndex = 1;
@@ -77,7 +81,7 @@ class _SettingsContentState extends State<SettingsContent> {
                     ),
                     DrawerListTile(
                       title: "Langue",
-                      svgSrc: "./assets/icons/globe.svg",
+                      svgSrc: "./assets/icons/globe1.svg",
                       press: () {
                         setState(() {
                           selectedIndex = 2;
@@ -87,7 +91,7 @@ class _SettingsContentState extends State<SettingsContent> {
                     ),
                     DrawerListTile(
                       title: "Aide",
-                      svgSrc: "./assets/icons/help.svg",
+                      svgSrc: "./assets/icons/help2.svg",
                       press: () {
                         setState(() {
                           selectedIndex = 3;
@@ -115,7 +119,7 @@ class _SettingsContentState extends State<SettingsContent> {
             child: Padding(
               padding: const EdgeInsets.all(appPadding),
               child: Container(
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   minWidth: 200, // specify the minimum width
                   maxWidth: 500, // specify the maximum width
                 ),

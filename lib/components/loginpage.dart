@@ -1,22 +1,20 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:newapp/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
-import 'dart:convert';
+import 'package:provider/provider.dart';
 
 import '../constants/constants.dart';
 import '../constants/responsive.dart';
 import '../constants/colors.dart';
 import '../constants/app_icons.dart';
 import '../constants/app_style.dart';
+import '../provider/auth_provider.dart';
+import '../utils/snack_messages.dart';
+import 'loginpageauth.dart';
 
 
 
 // ignore: camel_case_types
 class loginpageversion extends StatefulWidget {
-  const loginpageversion({super.key});
+  const loginpageversion({Key? key}) : super(key: key);
 
   @override
   State<loginpageversion> createState() => _loginpageversionState();
@@ -38,28 +36,13 @@ class _loginpageversionState extends State<loginpageversion> {
       _obscureText = !_obscureText;
     });
   }
-
-  Future<bool> _login() async {
-  final response = await http.post(
-    Uri.parse('http://51.178.142.70:8010/DMERP/v1/auth/login/'),
-    body: {
-      'email': _emailController.text,
-      'password': _passwordController.text,
-    },
-  );
-  if (response.statusCode == 200) {
-    var data = jsonDecode(response.body.toString());
-    String accessToken = data['access_token'];
-    print(accessToken);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('access_token', accessToken);
-    print ('success');
-    return true;
-  } else {
-    print('refus');
-    return false;
+  void dispose() {
+    _emailController.clear();
+    _passwordController.clear();
+    super.dispose();
   }
-}
+
+
 
 // ignore: unused_elem
 
@@ -67,6 +50,7 @@ class _loginpageversionState extends State<loginpageversion> {
 
   @override
   Widget build(BuildContext context) {
+
      double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -238,44 +222,53 @@ class _loginpageversionState extends State<loginpageversion> {
                       ),
                       ),
                       SizedBox(height: height * 0.05),
-                     Material(
-  child: InkWell(
-    onTap: () async {
-      bool isLoggedIn = await _login();
-      if (isLoggedIn) {
-        // do something if login was successful
-         // ignore: use_build_context_synchronously
-         Navigator.push(context, MaterialPageRoute(builder: (context) => const DashBoardScreen()));
-      } else {
-        // do something else if login was not successful
-        // e.g. show an error message
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Echec de la connexion. Veuillez réessayer.'),
-        ));
+                   Consumer<AuthenticationProvider>(
+  builder: (context, auth, child) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (auth.resMessage != '') {
+        showMessage(message: auth.resMessage, context: context);
+
+        ///Clear the response message to avoid duplicate
+        auth.clear();
       }
+    });
+    return Material(
+  borderRadius: BorderRadius.circular(4.0),
+  child: InkWell(
+    onTap: () {
+       if (_formKey.currentState!.validate()) {
+          if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+            (message: "All fields are required", context: context);
+          } else {
+            auth.loginUser(context: context, email: _emailController.text, password: _passwordController.text);
+          }
+        }
+
     },
     child: Center(
-      child: Ink(
-        height: 43,
-        width: width / 4,
-        decoration: BoxDecoration(
+      child:Ink(
+      height: 43,
+      width: width / 4,
+       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.0),
           color: primaryColor,
         ),
-        child: Center(
-          child: Text(
-            'LOGIN',
-            style: ralewayStyle.copyWith(
-              fontWeight: FontWeight.w800,
-              color: appcolors.whiteColor,
-              fontSize: 15.0,
-            ),
+      child: Center(
+        child: Text(
+          'LOGIN',
+          style: ralewayStyle.copyWith(
+            fontWeight: FontWeight.w800,
+            color: appcolors.whiteColor,
+            fontSize: 15.0,
           ),
         ),
       ),
+      ),
     ),
   ),
+);
+
+  },
 ),
 
                    Center(

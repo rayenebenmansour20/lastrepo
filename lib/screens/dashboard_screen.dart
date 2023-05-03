@@ -1,15 +1,18 @@
-import 'package:newapp/components/sidemenu.dart';
+
+
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-
+import '../components/loginpage.dart';
+import '../components/loginpageauth.dart';
+import '../components/sidemenu.dart';
 import '../constants/constants.dart';
-import '../constants/responsive.dart';
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _DashBoardScreenState createState() => _DashBoardScreenState();
 }
 
@@ -18,28 +21,20 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: bgColor,
-      drawer: const Sidemenu(),
-      body: const SafeArea(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-             Expanded(child: Sidemenu()),
-            /*if (Responsive.isMobile(context))
-              Container(
-                margin: const EdgeInsets.only(top: 18.0),
-                child: IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () {
-                    _scaffoldKey.currentState!.openDrawer();
-                  },
-                ),
-              ),*/
-          ],
+
+      return Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: bgColor,
+        drawer: const Sidemenu(),
+        body: const SafeArea(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: Sidemenu()),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    } 
   }
-}
+

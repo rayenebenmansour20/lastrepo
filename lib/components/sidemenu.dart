@@ -4,10 +4,11 @@ import 'package:newapp/components/clientspage/clientcontent.dart';
 import 'package:newapp/components/commandespage/commandesview.dart';
 import 'package:newapp/components/dashboardcontent.dart';
 import 'package:newapp/components/historiquepage/historiquecontent.dart';
-import 'package:newapp/components/loginpageauth.dart';
+import 'package:newapp/components/loginpage.dart';
 import 'package:newapp/components/produitspage/productcontent.dart';
 import 'package:newapp/components/settingspage/settingcontent.dart';
 import 'package:newapp/components/stockpage/stockcontent.dart';
+import 'package:newapp/provider/db_provider.dart';
 
 class Sidemenu extends StatefulWidget {
   const Sidemenu({super.key});
@@ -44,7 +45,10 @@ class _SidemenuState extends State<Sidemenu> {
       case 6:
         page = const SettingsContent();
         break;
- 
+      case 7:
+      DatabaseProvider().logOut(context);
+      page=const loginpageversion();
+      break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
