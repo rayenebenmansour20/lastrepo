@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:newapp/screens/dashboard_screen.dart';
@@ -11,7 +10,7 @@ import 'db_provider.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   ///Base Url
-final requestBaseUrl = 'http://51.178.142.70:8010/DMERP/v1/auth/login/';
+  final requestBaseUrl = 'http://51.178.142.70:8010/DMERP/v1/auth/login/';
 
   ///Setter
   bool _isLoading = false;
@@ -20,7 +19,6 @@ final requestBaseUrl = 'http://51.178.142.70:8010/DMERP/v1/auth/login/';
   //Getter
   bool get isLoading => _isLoading;
   String get resMessage => _resMessage;
-
 
   //Login
   void loginUser({
@@ -31,55 +29,84 @@ final requestBaseUrl = 'http://51.178.142.70:8010/DMERP/v1/auth/login/';
     _isLoading = true;
     notifyListeners();
     try {
-      http.Response req =
-        await http.post(
-      Uri.parse('http://51.178.142.70:8010/DMERP/v1/auth/login/'),
-      body: {
-        'email': email,
-        'password': password,
-      },
-    );
+      http.Response req = await http.post(
+        Uri.parse(requestBaseUrl),
+        body: {
+          'email': email,
+          'password': password,
+          'terminal': '18',
+        },
+      );
 
       if (req.statusCode == 200 || req.statusCode == 201) {
         final res = json.decode(req.body);
 
         print(res);
         _isLoading = false;
-        _resMessage = "Login successfull!";
+        _resMessage = "Login successful!";
         notifyListeners();
 
-        ///Save users data and then navigate to homepage
         final userId = res['user']['id'].toString();
+        final username = res['user']['username'];
         final token = res['access_token'];
+        final refreshToken = res['refresh_token'];
+        DatabaseProvider().saveUserName(username);
         DatabaseProvider().saveToken(token);
         DatabaseProvider().saveUserId(userId);
+        DatabaseProvider().saveRefreshToken(refreshToken);
+
         print("user id: $userId");
         http.Response verifyReq = await http.post(
-        Uri.parse('http://51.178.142.70:8010/DMERP/v1/auth/token/verify/'),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-      );
+            Uri.parse('http://51.178.142.70:8010/DMERP/v1/auth/token/verify/'),
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+            body: {
+              'token': '$token'
+            });
 
-       if (verifyReq.statusCode == 200) {
-        // Token is valid, do nothing
-      } else if (verifyReq.statusCode == 401) {
-        // Token is invalid, refresh token
-        http.Response refreshReq = await http.post(
-          Uri.parse('http://51.178.142.70:8010/DMERP/v1/auth/token/refresh/'),
-          headers: {
-            'Authorization': 'Bearer $token',
+        if (verifyReq.statusCode == 200) {
+          // Token is valid, do nothing
+        } else if (verifyReq.statusCode == 401) {
+          // Token is invalid, refresh token
+          String refreshToken = await DatabaseProvider().getRefreshToken();
+          http.Response refreshReq = await http.post(
+            Uri.parse('http://51.178.142.70:8010/DMERP/v1/auth/token/refresh/'),
+            body: {
+              'refresh': refreshToken,
+            },
+          );
+
+          if (refreshReq.statusCode == 200) {
+            final newToken = json.decode(refreshReq.body)['access_token'];
+            print(newToken);
+            DatabaseProvider().saveToken(newToken);
+          } else if (refreshReq.statusCode == 401) {
+            // Refresh token is expired, perform a new login request
+            loginUser(email: email, password: password, context: context);
+          } else {
+            // Refresh token failed, logout user
+            DatabaseProvider().logOut(context!);
+          }
+        }
+        http.Response sessionResponse = await http.post(
+          Uri.parse('http://51.178.142.70:8010/DMERP/v1/Caisse/HisCaisse/'),
+          headers: {'Authorization': 'Bearer $token'},
+          body: {
+            'CHCETAT': '0',
+            'CHCSITEID': '1',
+            'CHCTERMID': '1',
+            'CHCTINTR': '0',
+            'CHCUTLID': "28",
           },
         );
 
-        if (refreshReq.statusCode == 200) {
-          final newToken = json.decode(refreshReq.body)['access_token'];
-          DatabaseProvider().saveToken(newToken);
+        if (sessionResponse.statusCode == 200 ||
+            sessionResponse.statusCode == 201) {
+          print("Session opened successfully");
         } else {
-          // Refresh token failed, logout user
-          DatabaseProvider().logOut(context!);
+          print("Failed to open session");
         }
-      }
 
         PageNavigator(ctx: context).nextPageOnly(page: const DashBoardScreen());
       } else {

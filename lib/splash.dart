@@ -20,8 +20,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: FlutterLogo()),
+    return  Scaffold(
+      body: Center(
+        child:Image.asset(
+          "assets/images/datamasterlogo.png"
+        ),
+      ),
     );
   }
 

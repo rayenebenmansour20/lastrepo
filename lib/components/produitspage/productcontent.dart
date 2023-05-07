@@ -156,27 +156,6 @@ class _ProductContentState extends State<ProductContent>{
                          ),
                     ],
                   ),
-                  /*const Row(
-                    children: [
-                      Expanded(
-                      child:Column(
-                        children: [
-                          Row(
-                            children:[
-                            Text(
-                              'A Découvrir',
-                              style: TextStyle(fontSize: 20,fontWeight: FontWeight.w800),
-                            )
-                            ],
-                          ),
-                          Row(
-
-                          )
-                        ],
-                      ),
-                      ),
-                    ],
-                  )*/
                 ],
               ),
             ],

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:newapp/components/clients.dart';
 import 'package:newapp/components/clientspage/clientcontent.dart';
 import 'package:newapp/components/commandespage/commandesview.dart';
 import 'package:newapp/components/dashboardcontent.dart';
 import 'package:newapp/components/historiquepage/historiquecontent.dart';
-import 'package:newapp/components/loginpage.dart';
 import 'package:newapp/components/produitspage/productcontent.dart';
 import 'package:newapp/components/settingspage/settingcontent.dart';
 import 'package:newapp/components/stockpage/stockcontent.dart';
@@ -19,10 +19,19 @@ class Sidemenu extends StatefulWidget {
 
 class _SidemenuState extends State<Sidemenu> {
   var selectedIndex = 0;
+  void initState() {
+    super.initState();
+    DatabaseProvider().getSelectedPageIndex().then((index) {
+      setState(() {
+        selectedIndex = index;
+      });
+    });
+  }
 
   @override
+  @override
   Widget build(BuildContext context) {
-    Widget page;
+    Widget? page;
     switch (selectedIndex) {
       case 0:
         page = const DashboardContent();
@@ -34,7 +43,7 @@ class _SidemenuState extends State<Sidemenu> {
         page = const CommandesContent();
         break;
       case 3:
-        page = const ClientContent();
+        page = const ClientListScreen();
         break;
       case 4:
         page = const StockContent();
@@ -46,9 +55,8 @@ class _SidemenuState extends State<Sidemenu> {
         page = const SettingsContent();
         break;
       case 7:
-      DatabaseProvider().logOut(context);
-      page=const loginpageversion();
-      break;
+        DatabaseProvider().logOut(context);
+        break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -76,6 +84,8 @@ class _SidemenuState extends State<Sidemenu> {
                         press: () {
                           setState(() {
                             selectedIndex = 0;
+                            DatabaseProvider()
+                                .saveSelectedPageIndex(selectedIndex);
                           });
                         },
                         selected: selectedIndex == 0,
@@ -86,6 +96,8 @@ class _SidemenuState extends State<Sidemenu> {
                         press: () {
                           setState(() {
                             selectedIndex = 1;
+                            DatabaseProvider()
+                                .saveSelectedPageIndex(selectedIndex);
                           });
                         },
                         selected: selectedIndex == 1,
@@ -96,6 +108,8 @@ class _SidemenuState extends State<Sidemenu> {
                         press: () {
                           setState(() {
                             selectedIndex = 2;
+                            DatabaseProvider()
+                                .saveSelectedPageIndex(selectedIndex);
                           });
                         },
                         selected: selectedIndex == 2,
@@ -106,6 +120,8 @@ class _SidemenuState extends State<Sidemenu> {
                         press: () {
                           setState(() {
                             selectedIndex = 3;
+                            DatabaseProvider()
+                                .saveSelectedPageIndex(selectedIndex);
                           });
                         },
                         selected: selectedIndex == 3,
@@ -116,6 +132,8 @@ class _SidemenuState extends State<Sidemenu> {
                         press: () {
                           setState(() {
                             selectedIndex = 4;
+                            DatabaseProvider()
+                                .saveSelectedPageIndex(selectedIndex);
                           });
                         },
                         selected: selectedIndex == 4,
@@ -126,6 +144,8 @@ class _SidemenuState extends State<Sidemenu> {
                         press: () {
                           setState(() {
                             selectedIndex = 5;
+                            DatabaseProvider()
+                                .saveSelectedPageIndex(selectedIndex);
                           });
                         },
                         selected: selectedIndex == 5,
@@ -137,6 +157,8 @@ class _SidemenuState extends State<Sidemenu> {
                         press: () {
                           setState(() {
                             selectedIndex = 6;
+                            DatabaseProvider()
+                                .saveSelectedPageIndex(selectedIndex);
                           });
                         },
                         selected: selectedIndex == 6,
@@ -147,6 +169,8 @@ class _SidemenuState extends State<Sidemenu> {
                         press: () {
                           setState(() {
                             selectedIndex = 7;
+                            DatabaseProvider()
+                                .saveSelectedPageIndex(selectedIndex);
                           });
                         },
                         selected: selectedIndex == 7,
@@ -159,7 +183,7 @@ class _SidemenuState extends State<Sidemenu> {
             Expanded(
               flex: 5,
               child: Scaffold(
-                body:page,
+                body: page,
               ),
             ),
           ],

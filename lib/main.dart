@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newapp/provider/auth_provider.dart';
+import 'package:newapp/provider/client_provider.dart';
 import 'package:newapp/provider/db_provider.dart';
 import 'package:newapp/splash.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class App extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
         ChangeNotifierProvider(create: (_) => DatabaseProvider()),
+        ChangeNotifierProvider(create: (_) => ClientProvider()),
       ],
       child: MaterialApp(
         theme: ThemeData(

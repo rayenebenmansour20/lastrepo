@@ -1,4 +1,5 @@
 import 'dart:convert';
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:js';
 
 import 'package:flutter/material.dart';
@@ -40,51 +41,51 @@ class AuthState with ChangeNotifier {
   }
 
   Future<void> refreshToken() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  final previousToken = prefs.getString('access_token');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final previousToken = prefs.getString('access_token');
 
-  final response = await http.post(
-    Uri.parse('http://51.178.142.70:8010/DMERP/v1/auth/login/'),
-    headers: {
-      'Authorization': 'Bearer $previousToken',
-    },
-  );
+    final response = await http.post(
+      Uri.parse('http://51.178.142.70:8010/DMERP/v1/auth/login/'),
+      headers: {
+        'Authorization': 'Bearer $previousToken',
+      },
+    );
 
-  if (response.statusCode == 200) {
-    var data = jsonDecode(response.body.toString());
-    _accessToken = data['access_token'];
-    await prefs.setString('access_token', _accessToken);
-    print('access_token: $_accessToken');
-    notifyListeners();
-  } else if (response.statusCode == 401) { // unauthorized error
-    final errorResponse = jsonDecode(response.body.toString());
-    final error = errorResponse['detail'];
-    if (error.contains('token expired')) {
-      // token expired, show error message and logout user
-      print('Token expired: $error');
-      await logout();
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body.toString());
+      _accessToken = data['access_token'];
+      await prefs.setString('access_token', _accessToken);
+      print('access_token: $_accessToken');
+      notifyListeners();
+    } else if (response.statusCode == 401) {
+      // unauthorized error
+      final errorResponse = jsonDecode(response.body.toString());
+      final error = errorResponse['detail'];
+      if (error.contains('token expired')) {
+        // token expired, show error message and logout user
+        print('Token expired: $error');
+        await logout();
+      } else {
+        // other error, logout user
+        print('Error refreshing token: $error');
+        await logout();
+      }
     } else {
       // other error, logout user
-      print('Error refreshing token: $error');
+      print('Error refreshing token: ${response.statusCode}');
       await logout();
     }
-  } else {
-    // other error, logout user
-    print('Error refreshing token: ${response.statusCode}');
-    await logout();
   }
-}
 
-Future<void> logout() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.remove('access_token');
-  _accessToken = '';
-  _isAuthenticated = false;
-  notifyListeners();
-  // navigate user to the login page after logout
-Navigator.of(context as BuildContext).pushAndRemoveUntil(
-  MaterialPageRoute(builder: (context) => const loginpageversion()),
-  (route) => false
-);}
-
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('access_token');
+    _accessToken = '';
+    _isAuthenticated = false;
+    notifyListeners();
+    // navigate user to the login page after logout
+    Navigator.of(context as BuildContext).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const loginpageversion()),
+        (route) => false);
+  }
 }

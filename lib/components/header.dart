@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:newapp/provider/auth_provider.dart';
+import 'package:newapp/provider/db_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/colors.dart';
 import '../constants/constants.dart';
@@ -16,6 +19,8 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
+    final AuthenticationProvider _dbprovider = AuthenticationProvider();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -107,28 +112,35 @@ class _TicketiconState extends State<Ticketicon> {
     return Row(
       children: <Widget>[
        GestureDetector(
-  onTap: () {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('RayeneBen'),//nom du profil
-          actions: <Widget>[
-            Center(
-              child:TextButton(
-              style: TextButton.styleFrom(foregroundColor:Colors.blue), 
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ),
+  onTap: () async {
+    final dbProvider = Provider.of<DatabaseProvider>(context, listen: false);
+    final token = await dbProvider.getUserName();
+    final userData = await DatabaseProvider().getUserData();
 
-          ],
-        );
-      },
-    );
-  },
+    if (token.isNotEmpty) {
+  // ignore: use_build_context_synchronously
+  showDialog(
+    context: context,
+    builder: (BuildContext context)  {
+      return AlertDialog(
+        title: Text('Token: $token'),
+        content: Text('Username: ${userData['username']}'),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: Colors.blue),
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+},
+
    child: const CircleAvatar(
   backgroundColor: appcolors.grey1,
   radius:20,
