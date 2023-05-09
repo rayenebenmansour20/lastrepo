@@ -15,11 +15,19 @@ class Client {
 
   factory Client.fromJson(Map<String, dynamic> json) {
     return Client(
-      id: json['ID_ROWID'],
-      firstName: json['CEFPRENOM'],
-      lastName: json['CEFNOM'],
-      email: json['CEFEMAIL'],
-      phoneNumber: json['CEFTELMOB'],
+      id: json['ID_ROWID'] ?? 0,
+      firstName: json['CEFPRENOM'] ?? '',
+      lastName: json['CEFNOM'] ?? '',
+      email: json['CEFEMAIL'] ?? '',
+      phoneNumber: json['CEFTELMOB'] ?? '',
     );
   }
+
+   Map<String, dynamic> toJson() => {
+        'ID_ROWID': id,
+        'CEFPRENOM': firstName,
+        'CEFNOM': lastName,
+        'CEFEMAIL': email,
+        'CEFTELMOB': phoneNumber,
+      };
 }

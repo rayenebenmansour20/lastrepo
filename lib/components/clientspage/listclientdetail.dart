@@ -1,28 +1,21 @@
 import 'package:flutter/material.dart';
 import '../../constants/constants.dart';
+import '../../data/model/client.dart';
 
-class ReferalInfoModel {
-  final String? svgSrc, title;
-  final int? count;
-  final Color? color;
-  final int? quantite;
-  final String? categorie;
 
-  ReferalInfoModel({
-    this.svgSrc,
-    this.title,
-    this.count,
-    this.color,
-    this.quantite,
-    this.categorie,
-  });
-}
 
-class ClientlisteDetailDataTable extends StatelessWidget {
+// ignore: camel_case_types
+class ClientlisteDetailDataTable extends StatefulWidget {
   const ClientlisteDetailDataTable({Key? key, required this.info}) : super(key: key);
 
-  final List<ReferalInfoModel> info;
+  final List<Client> info;
 
+  @override
+  State<ClientlisteDetailDataTable> createState() => _ClientlisteDetailDataTableState();
+}
+
+// ignore: camel_case_types
+class _ClientlisteDetailDataTableState extends State<ClientlisteDetailDataTable> {
   @override
   Widget build(BuildContext context) {
     return DataTable(
@@ -32,27 +25,14 @@ class ClientlisteDetailDataTable extends StatelessWidget {
         DataColumn(label: Text('Category')),
         DataColumn(label: Text('Quantity')),
       ],
-      rows: info.map((info) {
+      rows: widget.info.map((info) {
         return DataRow(
           cells: [
             DataCell(
   Row(
     children: [
-      Container(
-        width: 24,
-        height: 24,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-        ),
-        child: Image.asset(
-          info.svgSrc!,
-          width: 12,
-          height: 12,
-        ),
-      ),
-      const SizedBox(width: 8),
       Text(
-        info.title!,
+        '${info.id}!',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(
@@ -65,7 +45,7 @@ class ClientlisteDetailDataTable extends StatelessWidget {
 
             DataCell(
               Text(
-                '${info.count!}',
+                info.firstName!,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: textColor,
@@ -74,7 +54,7 @@ class ClientlisteDetailDataTable extends StatelessWidget {
             ),
             DataCell(
               Text(
-                info.categorie!,
+                info.lastName!,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: textColor,
@@ -83,7 +63,7 @@ class ClientlisteDetailDataTable extends StatelessWidget {
             ),
             DataCell(
               Text(
-                '${info.quantite!}',
+                info.email!,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: textColor,

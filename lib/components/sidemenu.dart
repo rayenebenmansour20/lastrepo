@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:newapp/components/clients.dart';
 import 'package:newapp/components/clientspage/clientcontent.dart';
 import 'package:newapp/components/commandespage/commandesview.dart';
 import 'package:newapp/components/dashboardcontent.dart';
@@ -19,6 +18,7 @@ class Sidemenu extends StatefulWidget {
 
 class _SidemenuState extends State<Sidemenu> {
   var selectedIndex = 0;
+  @override
   void initState() {
     super.initState();
     DatabaseProvider().getSelectedPageIndex().then((index) {
@@ -43,7 +43,7 @@ class _SidemenuState extends State<Sidemenu> {
         page = const CommandesContent();
         break;
       case 3:
-        page = const ClientListScreen();
+        page = const ClientContent();
         break;
       case 4:
         page = const StockContent();

@@ -78,7 +78,7 @@ class AuthenticationProvider extends ChangeNotifier {
           );
 
           if (refreshReq.statusCode == 200) {
-            final newToken = json.decode(refreshReq.body)['access_token'];
+            final newToken = json.decode(refreshReq.body)['access'];
             print(newToken);
             DatabaseProvider().saveToken(newToken);
           } else if (refreshReq.statusCode == 401) {
@@ -94,10 +94,10 @@ class AuthenticationProvider extends ChangeNotifier {
           headers: {'Authorization': 'Bearer $token'},
           body: {
             'CHCETAT': '0',
-            'CHCSITEID': '1',
-            'CHCTERMID': '1',
+            'CHCSITEID': '4',
+            'CHCTERMID': '18',
             'CHCTINTR': '0',
-            'CHCUTLID': "28",
+            'CHCUTLID': '36',
           },
         );
 
