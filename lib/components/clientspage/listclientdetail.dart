@@ -24,6 +24,7 @@ class _ClientlisteDetailDataTableState extends State<ClientlisteDetailDataTable>
         DataColumn(label: Text('Count')),
         DataColumn(label: Text('Category')),
         DataColumn(label: Text('Quantity')),
+        DataColumn(label: Text('actions')),
       ],
       rows: widget.info.map((info) {
         return DataRow(
@@ -45,7 +46,7 @@ class _ClientlisteDetailDataTableState extends State<ClientlisteDetailDataTable>
 
             DataCell(
               Text(
-                info.firstName!,
+                info.firstName! ?? 'N/A',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: textColor,
@@ -61,6 +62,7 @@ class _ClientlisteDetailDataTableState extends State<ClientlisteDetailDataTable>
                 ),
               ),
             ),
+            
             DataCell(
               Text(
                 info.email!,

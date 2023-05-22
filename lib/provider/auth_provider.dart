@@ -13,10 +13,14 @@ class AuthenticationProvider extends ChangeNotifier {
   final requestBaseUrl = 'http://51.178.142.70:8010/DMERP/v1/auth/login/';
 
   ///Setter
+  ///
+  final bool _isLoggingIn = false;
   bool _isLoading = false;
   String _resMessage = '';
 
   //Getter
+    bool get isLoggingIn => _isLoggingIn;
+
   bool get isLoading => _isLoading;
   String get resMessage => _resMessage;
 
@@ -47,7 +51,7 @@ class AuthenticationProvider extends ChangeNotifier {
         notifyListeners();
 
         final userId = res['user']['id'].toString();
-        final username = res['user']['username'];
+        final username = res['user']['username'].toString();
         final token = res['access_token'];
         final refreshToken = res['refresh_token'];
         DatabaseProvider().saveUserName(username);
@@ -89,21 +93,25 @@ class AuthenticationProvider extends ChangeNotifier {
             DatabaseProvider().logOut(context!);
           }
         }
+
         http.Response sessionResponse = await http.post(
           Uri.parse('http://51.178.142.70:8010/DMERP/v1/Caisse/HisCaisse/'),
           headers: {'Authorization': 'Bearer $token'},
           body: {
             'CHCETAT': '0',
-            'CHCSITEID': '4',
+            'CHCSITEID': '1',
             'CHCTERMID': '18',
             'CHCTINTR': '0',
-            'CHCUTLID': '36',
+            'CHCUTLID': userId,
           },
         );
 
         if (sessionResponse.statusCode == 200 ||
             sessionResponse.statusCode == 201) {
-          print("Session opened successfully");
+              final seb = jsonDecode(sessionResponse.body);
+              final sessionid = seb['ID_ROWID'].toString();
+              DatabaseProvider().saveSessionId(sessionid);
+                        print("Session opened successfully");
         } else {
           print("Failed to open session");
         }

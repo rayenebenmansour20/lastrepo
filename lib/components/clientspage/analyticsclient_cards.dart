@@ -58,20 +58,20 @@ List analyticData = [
     title: "Total clients",
     count: 720,
     svgSrc: const Icon(Icons.abc_rounded),
-    color: primaryColor,
+    color: const Color.fromARGB(255, 238, 194, 142),
   ),
 
   AnalyticclientInfo(
     title: "Hommes",
     count: 820,
     svgSrc: const Icon(Icons.post_add),
-    color:Colors.red,
+    color:const Color(0xFFADD8E6),
   ),
   AnalyticclientInfo(
     title: "Femmes",
     count: 920,
     svgSrc: const Icon(Icons.pages),
-    color: orange,
+    color: const Color(0xFFFFB6C1),
   ),
   
 ];

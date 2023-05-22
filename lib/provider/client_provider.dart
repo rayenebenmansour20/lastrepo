@@ -15,7 +15,7 @@ class ClientProvider with ChangeNotifier {
     String token = value.getString('token')!;
 
     final response = await http.get(
-      Uri.parse('http://51.178.142.70:8010/DMERP/v1/Caisse/Client/?page=1'),
+      Uri.parse('http://51.178.142.70:8010/DMERP/v1/Caisse/Client'),
       headers: {'Authorization': 'Bearer $token'},
     );
     if (response.statusCode == 200) {
@@ -31,30 +31,109 @@ class ClientProvider with ChangeNotifier {
   }
 
 
-   Future<String?> addClient(Client client) async {
+  Future<String?> addClient(Client client) async {
   SharedPreferences prefs = await _pref;
   String token = prefs.getString('token')!;
-  final response = await http.post(
-    Uri.parse('http://51.178.142.70:8010/DMERP/v1/Caisse/Client/'),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token'
-    },
-    body: jsonEncode(client),
-  );
+  http.Response? response; // Declare the response variable outside the try block
+  try {
+    response = await http.post(
+      Uri.parse('http://51.178.142.70:8010/DMERP/v1/Caisse/Client/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+      body: jsonEncode(client.toJson()),
+    );
 
-  if (response.statusCode == 200) {
-    final dynamic jsonData = jsonDecode(response.body);
-    Client newClient = Client.fromJson(jsonData);
-    _clients.add(newClient);
-    notifyListeners();
-    return null;
-  } else {
-    final dynamic jsonData = jsonDecode(response.body);
-    String errorMessage = jsonData['detail'];
-    return errorMessage;
+    if (response.statusCode == 200) {
+      final dynamic jsonData = jsonDecode(response.body);
+      Client newClient = Client.fromJson(jsonData);
+      _clients.add(newClient);
+      notifyListeners();
+      print('Client added');
+      return null;
+    } else {
+      final dynamic jsonData = jsonDecode(response.body);
+      String errorMessage = jsonData['detail'];
+      print('Client not added');
+      return errorMessage;
+    }
+  } catch (error) {
+    print('Request failed with error: $error');
+    print(response?.body); // Access the response variable with null-aware operator '?'
   }
+  return null;
 }
+  Future<String?> updateClient(Client client) async {
+    SharedPreferences prefs = await _pref;
+    String token = prefs.getString('token')!;
+    http.Response? response; 
+
+    try {
+      response = await http.put(
+        Uri.parse('http://51.178.142.70:8010/DMERP/v1/Caisse/Client/${client.id}/'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode(client.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        final dynamic jsonData = jsonDecode(response.body);
+        Client updatedClient = Client.fromJson(jsonData);
+        int index = _clients.indexWhere((c) => c.id == updatedClient.id);
+        _clients[index] = updatedClient;
+        notifyListeners();
+        print('Client updated');
+        return null;
+      } else {
+        final dynamic jsonData = jsonDecode(response.body);
+        String errorMessage = jsonData['detail'];
+        print('Client not updated');
+        return errorMessage;
+      }
+    } catch (error) {
+      print('Request failed with error: $error');
+      print(response?.body); 
+    }
+
+    return null;
+  }
+
+  Future<String?> deleteClient(int id) async {
+  SharedPreferences prefs = await _pref;
+  String token = prefs.getString('token')!;
+  http.Response? response;
+
+  try {
+    response = await http.delete(
+      Uri.parse('http://51.178.142.70:8010/DMERP/v1/Caisse/Client/$id/'),  // Added trailing slash
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      _clients.removeWhere((client) => client.id == id);
+      notifyListeners();
+      print('Client deleted');
+      return null;
+    } else {
+      final dynamic jsonData = jsonDecode(response.body);
+      String errorMessage = jsonData['detail'];
+      print('Client not deleted');
+      return errorMessage;
+    }
+  } catch (error) {
+    print('Request failed with error: $error');
+    print(response?.body); 
+  }
+
+  return null;
+}
+
 
 
 }

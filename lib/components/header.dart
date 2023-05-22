@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:newapp/provider/auth_provider.dart';
+import 'package:newapp/components/settingspage/settingcontent.dart';
 import 'package:newapp/provider/db_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,8 +19,8 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
-    final AuthenticationProvider _dbprovider = AuthenticationProvider();
-
+  
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -82,8 +82,11 @@ class Ticketicon extends StatefulWidget {
 }
 
 class _TicketiconState extends State<Ticketicon> {
-    String? _imageUrl;
+    bool showSettingsTile = false;
 
+    String? _imageUrl;
+    
+    
   @override
   void initState() {
     super.initState();
@@ -107,6 +110,18 @@ class _TicketiconState extends State<Ticketicon> {
       _imageUrl = prefs.getString('image_url');
     });
   }
+
+  void _navigateToSettingsPage() {
+  /*setState(() {
+    var selectedIndex = 6;
+  });*/
+  Navigator.of(context).push(
+    MaterialPageRoute(builder: (context) =>  const SettingsContent()),
+  );
+}
+
+
+  
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -114,56 +129,88 @@ class _TicketiconState extends State<Ticketicon> {
        GestureDetector(
   onTap: () async {
     final dbProvider = Provider.of<DatabaseProvider>(context, listen: false);
-    final token = await dbProvider.getUserName();
+    final token = await dbProvider.getToken();
     final userData = await DatabaseProvider().getUserData();
 
     if (token.isNotEmpty) {
-  // ignore: use_build_context_synchronously
-  showDialog(
-    context: context,
-    builder: (BuildContext context)  {
-      return AlertDialog(
-        title: Text('Token: $token'),
-        content: Text('Username: ${userData['username']}'),
-        actions: <Widget>[
-          TextButton(
-            style: TextButton.styleFrom(foregroundColor: Colors.blue),
-            child: const Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
+      // ignore: use_build_context_synchronously
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            insetPadding: const EdgeInsets.all(20),
+            child: FractionallySizedBox(
+              widthFactor: 0.3,
+              heightFactor: 0.4,
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundImage: NetworkImage('${userData['MUTPHOTOS']}'),
+                      radius: 50,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '${userData['username']}',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '${userData['MUTPROFID']['MPRLIBLONG']}',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color:Colors.green,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        ElevatedButton(
+                            style: TextButton.styleFrom(foregroundColor: Colors.white),
+                            onPressed: _navigateToSettingsPage,
+                            child: const Text('Consulter mon profil'),
+                           ),
+
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       );
+    }
+  },
+  child: FutureBuilder<Map<String, dynamic>>(
+    future: DatabaseProvider().getUserData(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        // While waiting for the future to complete, you can show a loading indicator or placeholder
+        return const CircularProgressIndicator();
+      } else if (snapshot.hasError) {
+        // If an error occurs, you can show an error message
+        return Text('Error: ${snapshot.error}');
+      } else {
+        // If the future completes successfully, you can access the user data from the snapshot
+        final userData = snapshot.data;
+
+        return CircleAvatar(
+          backgroundImage: NetworkImage('${userData?['MUTPHOTOS']}'),
+          radius: 20,
+        );
+      }
     },
-  );
-}
-
-},
-
-   child: const CircleAvatar(
-  backgroundColor: appcolors.grey1,
-  radius:20,
-  child: Stack(
-    alignment: Alignment.center,
-    children: [
-      Icon(
-        Icons.shopping_cart,
-        color: Colors.black,
-        size: 22,
-      ),
-      Positioned(
-        top: 0,
-        right: 2,
-        child: CircleAvatar(
-          backgroundColor: Colors.red,
-          radius: 4,
-        ),
-      ),
-    ],
   ),
-)
 ),
+
 const SizedBox(width: 5,),
         GestureDetector(
   onTap: () {
@@ -275,38 +322,3 @@ const SizedBox(width: 5,),
     );
   }
 }
-
-
-// ignore: camel_case_types
-/*class notificationicon extends StatelessWidget{
-  const notificationicon({
-    super.key,
-    int counter =0,
-  });
-  @override
-  Widget build(BuildContext context){
-    return Row(
-      children: <Widget>[
-      IconButton(
-        onPressed: (){
-          debugPrint('Notificationbar');
-        } ,
-        icon:Stack(
-          children:<Widget>[
-            CircleAvatar(
-            radius:100,  
-            backgroundColor:Colors.white,
-            child:Icon(Icons.notifications,
-            color:Colors.black)),
-            Positioned(
-              left:16,
-              bottom: 15,
-              child: Icon(Icons.brightness_1 ,
-              color:Colors.red,
-              size:9))
-          ]
-        ),), 
-      ],
-    );
-  }
-}*/

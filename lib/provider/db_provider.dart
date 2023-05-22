@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,6 +16,8 @@ class DatabaseProvider extends ChangeNotifier {
   String _userName = '';
 
   String _userId = '';
+
+  File? _imageFile; // <-- A
 
   String get username => _userName;
   String get token => _token;
@@ -38,6 +42,21 @@ class DatabaseProvider extends ChangeNotifier {
     void saveRefreshToken(String refreshToken) async {
     SharedPreferences value = await _pref;
     value.setString('refreshToken', refreshToken);
+  }
+  void saveSessionId(String sessionid) async{
+    SharedPreferences value = await _pref;
+    value.setString('sessionid', sessionid);
+  }
+
+  Future<String> getSessionID() async {
+    SharedPreferences value = await _pref;
+    if (value.containsKey('sessionid')){
+      String sessionid = value.getString('sessionid')!;
+      return sessionid;
+          }
+          else{
+            return '';
+          }
   }
 
   Future<String> getRefreshToken() async {
@@ -128,17 +147,29 @@ class DatabaseProvider extends ChangeNotifier {
     }
   }
 
-  
+  // Add pickImage method
+  Future<void> pickImage(ImageSource source) async {
+    // ignore: deprecated_member_use
+    final pickedFile = await ImagePicker().getImage(source: source);
+    if (pickedFile != null) {
+      _imageFile = File(pickedFile.path);
+      notifyListeners();
+    }
+  }
+
+  // Add imageFile getter
+  File? get imageFile => _imageFile;
 
   void logOut(BuildContext context) async {
     final token = await getToken();
+  String sessionid = await getSessionID();  // Convert sessionid to a string
 
   // Close the session using the provided API
   http.Response closeSessionResponse = await http.post(
     Uri.parse('http://51.178.142.70:8010/DMERP/v1/Caisse/MiseEnAttenteSession/'),
     headers: {'Authorization': 'Bearer $token'},
     body: {
-      'ID_ROWID': '338', // Replace with the correct ID_ROWID value
+      'ID_ROWID':sessionid, // Replace with the correct ID_ROWID value
       'CHCTTR': '0',
     },
   );
@@ -156,3 +187,7 @@ class DatabaseProvider extends ChangeNotifier {
     PageNavigator(ctx: context).nextPageOnly(page: const loginpageversion());
   }
 }
+
+
+
+

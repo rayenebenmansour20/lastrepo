@@ -3,9 +3,12 @@
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:newapp/components/header.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants/constants.dart';
 import '../../constants/responsive.dart';
+import '../../data/model/client.dart';
+import '../../provider/client_provider.dart';
 import 'analyticsclient_cards.dart';
 import 'listclient.dart';
 
@@ -19,7 +22,11 @@ class ClientContent extends StatefulWidget {
 }
 
 class _ClientContentState extends State<ClientContent>{
-  
+  final TextEditingController input1Controller = TextEditingController();
+  final TextEditingController input2Controller = TextEditingController();
+  final TextEditingController input3Controller = TextEditingController();
+  final TextEditingController input4Controller = TextEditingController();
+  final TextEditingController input5Controller = TextEditingController();  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -49,125 +56,224 @@ class _ClientContentState extends State<ClientContent>{
   showDialog(
     context: context,
     builder: (BuildContext context) {
+      final GlobalKey<FormState> formKey = GlobalKey<FormState>();
       return Dialog(
         insetPadding: const EdgeInsets.all(20), // Add some padding to reduce the dialog size
         child: FractionallySizedBox(
-          widthFactor: 0.3,
-          heightFactor: 0.5,
+          widthFactor: 0.5,
+          heightFactor: 0.65,
           child: Container(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start, // Align title to the left
-              children: [
-                const Text(
-                  'Nouveau Client',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 16),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Input 1'),
-                              const SizedBox(height: 8),
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  hintText: 'Enter input 1',
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: appPadding,),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Input 2'),
-                              const SizedBox(height: 8),
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  hintText: 'Enter input 2',
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Input 3'),
-                              const SizedBox(height: 8),
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  hintText: 'Enter input 3',
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width:appPadding),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Input 4'),
-                              const SizedBox(height: 8),
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  hintText: 'Enter input 4',
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start, // Align title to the left
+                children: [
+                  const Text(
+                    'Nouveau Client',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
-                // ... Keep the existing input fields and SizedBoxes ...
-                const SizedBox(height: 16),
-                Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          // Handle blue button tap
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                  Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Nom'),
+                                const SizedBox(height: 8),
+                                TextFormField(
+                                  controller: input1Controller,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Saisissez le nom',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: appPadding,),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Prénom'),
+                                const SizedBox(height: 8),
+                                TextFormField(
+                                  controller: input2Controller,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Saisissez le prénom',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Email'),
+                                const SizedBox(height: 8),
+                                TextFormField(
+                                  controller: input3Controller,
+                                  decoration: const InputDecoration(
+                                    hintText: "Saisissez lemail",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width:appPadding),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('N° de téléphone'),
+                                const SizedBox(height: 8),
+                                TextFormField(
+                                  controller: input4Controller,
+                                  decoration: const InputDecoration(
+                                    hintText: "Saisissez le numéro de téléphone",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Tarif'),
+                                const SizedBox(height: 8),
+                                 MultiSelectFormField(
+                      title: const Text('Choisissez un tarif'),
+                      dataSource: const [
+              {'display': 'VIP', 'value': '1'},
+              {'display': 'Passager', 'value': '2'},
+              {'display': 'Normal', 'value': '3'},
+                      ],
+                      textField: 'display',
+                      valueField: 'value',
+                      okButtonLabel: 'OK',
+                      cancelButtonLabel: 'Annuler',
+                      //hintText: 'Select inputs',
+                      initialValue: const [], // set initial value here
+                      onSaved: (value) {
+              // Handle selected inputs
+                      },
+                    ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width:appPadding),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('N° de carte fidelité'),
+                                const SizedBox(height: 8),
+                                TextFormField(
+                                  controller: input5Controller,
+                                  decoration: const InputDecoration(
+                                    hintText: "Saisissez le numéro",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  // ... Keep the existing input fields and SizedBoxes ...
+                  const SizedBox(height: 16),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex:1,
+                        child: ElevatedButton(
+                          onPressed: () async {
+  // Retrieve the values from the input fields
+            String firstName = input1Controller.text;
+            String lastName = input2Controller.text;
+            String email = input3Controller.text;
+            String phoneNumber = input4Controller.text;
+            String identcard = input5Controller.text;
+  
+  // Create a new Client object with the retrieved values
+  Client newClient = Client(
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    phoneNumber: phoneNumber,
+    identcard: identcard,
+    isvalid: true,
+    tarifprod: 1,
+    userid: '36',
+  );
+  
+  // Call the addClient method from the ClientProvider
+  String? errorMessage = await Provider.of<ClientProvider>(context, listen: false)
+      .addClient(newClient);
+  
+  // Handle the result of adding the client
+  if (errorMessage == null) {
+    Navigator.of(context).pop();
+    WidgetsBinding.instance.scheduleFrame();
+
+
+    // Perform any additional actions or show a success message
+  } else {
+    // Failed to add the client
+    // Handle the error, such as displaying an error message
+  }
+},
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                          ),
+                          child: const Text('Blue Button'),
                         ),
-                        child: const Text('Blue Button'),
-                      ),
-                      const SizedBox(width: appPadding * 2), // Increase space between the buttons
-                      OutlinedButton(
-                        onPressed: () {
-                          // Handle white button tap
-                        },
-                        child: const Text('White Button'),
-                      ),
-                    ],
+                        ),
+                        const SizedBox(width: appPadding * 2),
+                        Expanded(
+                          flex:1, // Increase space between the buttons
+                        child: OutlinedButton(
+                          onPressed: () {
+                            // Handle white button tap
+                          },
+                          child: const Text('White Button'),
+                        ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -203,10 +309,10 @@ class _ClientContentState extends State<ClientContent>{
         MultiSelectFormField(
           title: const Text('Select inputs'),
           dataSource: const [
-            {'display': 'Input 1', 'value': 'input_1'},
-            {'display': 'Input 2', 'value': 'input_2'},
-            {'display': 'Input 3', 'value': 'input_3'},
-          ],
+            {'display': 'VIP', 'value': '1'},
+            {'display': 'Passager', 'value': '2'},
+            {'display': 'Fidèle', 'value': '3'},
+          ],  
           textField: 'display',
           valueField: 'value',
           okButtonLabel: 'OK',

@@ -31,7 +31,8 @@ class App extends StatelessWidget {
                 const FloatingActionButtonThemeData(backgroundColor: primaryColor),
             primaryColor: primaryColor),
         home: const SplashScreen(),
-      ),
+        
+      ),  
     );
   }
 }
