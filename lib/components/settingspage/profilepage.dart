@@ -11,7 +11,17 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   Map<String, dynamic> userData = {};
-  late Future<String>? etat;
+  
+   Future<String>? etat;
+
+   Future<String> verifetat(DatabaseProvider databaseProvider) async {
+    final res = await databaseProvider.getUserData();
+    if (res['is_active'] == true) {
+      return 'Actif';
+    } else {
+      return 'Inactif';
+    }
+  }
 
   @override
   void initState() {
@@ -30,16 +40,8 @@ class _UserProfileState extends State<UserProfile> {
         });
       });
     });
-  }
+      }
 
-  Future<String> verifetat(DatabaseProvider databaseProvider) async {
-    final res = await databaseProvider.getUserData();
-    if (res['is_active'] == 'true') {
-      return 'Actif';
-    } else {
-      return 'Inactif';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
