@@ -133,6 +133,18 @@ class ClientProvider with ChangeNotifier {
 
   return null;
 }
+int getVipCount() {
+  return _clients.where((client) => client.tarifprod == 1).length;
+}
+  
+int getPassagerCount() {
+  return _clients.where((client) => client.tarifprod == 2).length;
+}
+
+int getNormalCount() {
+  return _clients.where((client) => client.tarifprod == 3).length;
+}
+
 
 
 

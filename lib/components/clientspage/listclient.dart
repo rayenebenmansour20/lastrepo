@@ -19,6 +19,8 @@ class Clientliste extends StatefulWidget {
 
 class _ClientlisteState extends State<Clientliste> {
   int _currentPage = 0;
+  int? selectedTarif;
+
   
   final int _perPage = 30;
   final TextEditingController firstNameController = TextEditingController();
@@ -118,6 +120,8 @@ void showEditDialog() {
               Text('Last Name: ${client.lastName}'),
               Text('Email: ${client.email}'),
               Text('Phone Number: ${client.phoneNumber}'),
+              Text('Tarif: ${client.tarifprod}'),
+              Text('Identifiant: ${client.identcard}'),
             ],
           ),
           actions: [
@@ -235,7 +239,6 @@ void showEditDialog() {
             DataCell(
               GestureDetector(
                 onTap: () {
-              showClientDetails(info);
             },
               child: Row(
                 children: [
@@ -276,7 +279,6 @@ void showEditDialog() {
             DataCell(
               GestureDetector(
                 onTap: () {
-              showClientDetails(info);
             },
               child: Text(
                 info.lastName!,
@@ -429,23 +431,30 @@ void showEditDialog() {
                             children: [
                               const Text('Tarif'),
                               const SizedBox(height: 8),
-                               MultiSelectFormField(
-          title: const Text('Choisissez un tarif'),
-          dataSource: const [
-            {'display': 'VIP', 'value': '1'},
-            {'display': 'Passager', 'value': '2'},
-            {'display': 'Normal', 'value': '3'},
-          ],
-          textField: 'display',
-          valueField: 'value',
-          okButtonLabel: 'OK',
-          cancelButtonLabel: 'Annuler',
-          //hintText: 'Select inputs',
-          initialValue: const [], // set initial value here
-          onSaved: (value) {
-            // Handle selected inputs
-          },
-        ),
+                               DropdownButtonFormField<int>(
+  decoration: const InputDecoration(labelText: 'Choisissez un tarif'),
+  value: selectedTarif,
+  items: const [
+    DropdownMenuItem(
+      child: Text("VIP"),
+      value: 1,
+    ),
+    DropdownMenuItem(
+      child: Text("Passager"),
+      value: 2,
+    ),
+    DropdownMenuItem(
+      child: Text("Normal"),
+      value: 3,
+    ),
+  ],
+  onChanged: (value) {
+    setState(() {
+      selectedTarif = value;
+    });
+  },
+),
+
                             ],
                           ),
                         ),
@@ -487,7 +496,7 @@ void showEditDialog() {
       lastName: lastNameController.text,
       email: emailController.text,
       phoneNumber: phoneNumberController.text,
-      tarifprod: 1,
+      tarifprod: selectedTarif,
       isvalid: true,
       userid: '36',  // If tarifprod is an integer
       identcard: identcardController.text,
@@ -537,6 +546,7 @@ void showEditDialog() {
             color:Colors.blueAccent, // Icon to view data
             onPressed: () {
               // Implement your viewing logic here
+              showClientDetails(info);
             },
           ),
         ],
@@ -557,5 +567,6 @@ void showEditDialog() {
     );
   }
 }
+
 
 List<Client> clientData = [];

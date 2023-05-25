@@ -8,6 +8,7 @@ class AnalyticclientInfo {
   final int? count;
   final Color? color;
 
+
   AnalyticclientInfo({
     this.svgSrc,
     this.title,
@@ -17,10 +18,9 @@ class AnalyticclientInfo {
 }
 
 class AnalyticInfoclientCard extends StatelessWidget {
-  const AnalyticInfoclientCard({Key? key, required this.info, this.color}) : super(key: key);
+  const AnalyticInfoclientCard({Key? key, required this.info}) : super(key: key);
 
   final AnalyticclientInfo info;
-  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -37,23 +37,23 @@ class AnalyticInfoclientCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-           Align(
+          Align(
             alignment: Alignment.center,
-          child:Text(
-            info.title!,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: textColor,
-              fontSize: 25,
-              fontWeight: FontWeight.w600,
+            child: Text(
+              info.title!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: textColor,
+                fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-             Text(
+              Text(
                 "${info.count}",
                 style: const TextStyle(
                   color: textColor,

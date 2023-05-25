@@ -49,6 +49,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.1"
+  colour:
+    dependency: transitive
+    description:
+      name: colour
+      sha256: "496ea0e7614480acf1b1b669bd5c136cc9fb89461b36bb6b475513221409e96b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
+  colours:
+    dependency: "direct main"
+    description:
+      name: colours
+      sha256: e0a300fc51e6c6cc3e4d5e1f6810259982eefa77a3013d22792a9fd84c387119
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   cross_file:
     dependency: transitive
     description:
@@ -182,6 +198,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  flutter_slidable:
+    dependency: transitive
+    description:
+      name: flutter_slidable
+      sha256: "90787334388211e6810065550119b015e6fd3893584641194d500bf5bc7e6235"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.2"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -296,6 +320,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.8"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.17.0"
   js:
     dependency: transitive
     description:
@@ -432,6 +464,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.3.0"
+  pigment:
+    dependency: transitive
+    description:
+      name: pigment
+      sha256: b8c56059e21ecb9379a304c78a4f20e399d41e54384a7f64de21103b4b5c38dd
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   platform:
     dependency: transitive
     description:
@@ -541,6 +581,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  stacked_notification_cards:
+    dependency: "direct main"
+    description:
+      name: stacked_notification_cards
+      sha256: "8eab61679acf731315efd5011a632d6522b028f9767c165459e86081a9c262cd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0-dev.2"
   sticky_headers:
     dependency: "direct main"
     description:

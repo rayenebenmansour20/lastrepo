@@ -53,6 +53,8 @@ dependencies:
   sticky_headers: ^0.3.0+2
   url_launcher: ^6.1.11
   webview_flutter: ^4.2.0
+  colours: ^0.0.2
+  stacked_notification_cards: ^0.1.0-dev.2
 
 dev_dependencies:
   flutter_test:
