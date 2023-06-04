@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../provider/db_provider.dart';
 
 class UserProfile extends StatefulWidget {
+  const UserProfile({super.key});
+
   @override
   State<UserProfile> createState() => _UserProfileState();
 }
@@ -126,7 +128,7 @@ class _UserProfileState extends State<UserProfile> {
                           ),
                         );
                       } else {
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       }
                     },
                     )
@@ -152,7 +154,7 @@ class _UserProfileState extends State<UserProfile> {
                 ),
                 child: ListView.builder(
                   itemCount: userInfos.length,
-                  itemBuilder: (context, index) => Container(
+                  itemBuilder: (context, index) => SizedBox(
                     height: 70, 
                     child: Card(
                       child: ListTile(

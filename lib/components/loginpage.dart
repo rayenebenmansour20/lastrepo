@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import '../constants/constants.dart';
 import '../constants/responsive.dart';
@@ -10,7 +11,6 @@ import '../constants/app_style.dart';
 import '../provider/auth_provider.dart';
 import '../utils/snack_messages.dart';
 
-// ignore: camel_case_types
 class loginpageversion extends StatefulWidget {
   const loginpageversion({Key? key}) : super(key: key);
 
@@ -18,12 +18,14 @@ class loginpageversion extends StatefulWidget {
   State<loginpageversion> createState() => _loginpageversionState();
 }
 
-// ignore: camel_case_types
 class _loginpageversionState extends State<loginpageversion> {
   bool _obscureText = true;
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _emailController;
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  List<String> _emailList = ['rayenebenmansour20@gmail.com'];
+  String? _selectedEmail;
+  bool _isEmailEmpty = false;
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -31,23 +33,38 @@ class _loginpageversionState extends State<loginpageversion> {
     });
   }
 
-    @override
+  @override
   void initState() {
     super.initState();
-    _emailController = TextEditingController();
-    SharedPreferences.getInstance().then((prefs) {
-      String? email = prefs.getString('email');
-      if (email != null) {
-        _emailController.text = email;
-      }
+    _getEmailListFromSharedPreferences().then((emails) {
+      setState(() {
+        _emailList = emails ?? [];
+        _selectedEmail = _emailList.isNotEmpty ? _emailList.first : null;
+        _emailController.text = _selectedEmail ?? '';
+      });
+    });
+
+    _emailController.addListener(() {
+      setState(() {
+        _isEmailEmpty = _emailController.text.isEmpty;
+      });
     });
   }
 
+  Future<List<String>?> _getEmailListFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList('emailList');
+  }
+
+  Future<void> _saveEmailList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('emailList', _emailList);
+  }
 
   @override
   void dispose() {
-    _emailController.clear();
-    _passwordController.clear();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -58,9 +75,8 @@ class _loginpageversionState extends State<loginpageversion> {
     return Scaffold(
       body: Stack(
         children: [
-          // ... Rest of the UI code ...
-           Image.asset(
-            'assets/images/shopping-box.jpg', // replace with your image file path
+          Image.asset(
+            'assets/images/shopping-box.jpg',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
@@ -74,12 +90,13 @@ class _loginpageversionState extends State<loginpageversion> {
                 height: height,
                 width: width / 3,
                 margin: EdgeInsets.symmetric(
-                    horizontal: Responsive.isMobile(context)
-                        ? height * 0.032
-                        : height * 0.12),
+                  horizontal: Responsive.isMobile(context)
+                      ? height * 0.032
+                      : height * 0.12,
+                ),
                 decoration: BoxDecoration(
                   color: appcolors.backColor,
-                  borderRadius: BorderRadius.circular(20), // add border radius
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Form(
                   key: _formKey,
@@ -96,7 +113,6 @@ class _loginpageversionState extends State<loginpageversion> {
                           'assets/images/datamasterlogo.png',
                           fit: BoxFit.contain,
                           height: 70,
-                          // Adjust the fit property as per your requirement
                         ),
                       ),
                       SizedBox(height: height * 0.1),
@@ -108,51 +124,71 @@ class _loginpageversionState extends State<loginpageversion> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4.0),
                             color: appcolors.whiteColor,
+                            border: Border.all(
+                              color: _isEmailEmpty ? Colors.red : Colors.transparent,
+                            ),
                           ),
-                          child: TextFormField(
-                            controller: _emailController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Veuillez entre votre email';
-                              }
-                              return null;
-                            },
-                            style: ralewayStyle.copyWith(
-                              fontWeight: FontWeight.w400,
-                              color: appcolors.blueDarkColor,
-                              fontSize: 12.0,
-                            ),
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              suffixIcon: Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.blue,
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
+                          child: Stack(
+                            children: [
+                              TypeAheadFormField<String>(
+                                textFieldConfiguration: TextFieldConfiguration(
+                                  controller: _emailController,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    suffixIcon: Stack(
+                                      children: [
+                                        Positioned.fill(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius: BorderRadius.circular(4),
+                                            ),
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {},
+                                          icon: ColorFiltered(
+                                            colorFilter: const ColorFilter.mode(
+                                              Colors.white,
+                                              BlendMode.srcIn,
+                                            ),
+                                            child: Image.asset(AppIcons.emailIcon),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    contentPadding: const EdgeInsets.only(top: 16.0, left: 16),
+                                    hintText: 'Enter your email',
+                                    hintStyle: ralewayStyle.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                      color: appcolors.blueDarkColor.withOpacity(0.5),
+                                      fontSize: 12.0,
                                     ),
                                   ),
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: ColorFiltered(
-                                      colorFilter: const ColorFilter.mode(
-                                          Colors.white, BlendMode.srcIn),
-                                      child: Image.asset(AppIcons.emailIcon),
-                                    ),
+                                  style: ralewayStyle.copyWith(
+                                    fontWeight: FontWeight.w400,
+                                    color: appcolors.blueDarkColor,
+                                    fontSize: 12.0,
                                   ),
-                                ],
+                                ),
+                                suggestionsCallback: (pattern) async {
+                                  return _emailList
+                                      .where((email) => email.contains(pattern))
+                                      .toList();
+                                },
+                                itemBuilder: (context, String suggestion) {
+                                  return ListTile(
+                                    title: Text(suggestion),
+                                  );
+                                },
+                                onSuggestionSelected: (String suggestion) {
+                                  setState(() {
+                                    _selectedEmail = suggestion;
+                                    _emailController.text = suggestion;
+                                  });
+                                },
                               ),
-                              contentPadding:
-                                  const EdgeInsets.only(top: 16.0, left: 16),
-                              hintText: 'Entrer votre email',
-                              hintStyle: ralewayStyle.copyWith(
-                                fontWeight: FontWeight.w400,
-                                color: appcolors.blueDarkColor.withOpacity(0.5),
-                                fontSize: 12.0,
-                              ),
-                            ),
+                            ],
                           ),
                         ),
                       ),
@@ -165,15 +201,18 @@ class _loginpageversionState extends State<loginpageversion> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4.0),
                             color: appcolors.whiteColor,
+                            border: Border.all(
+                              color: _isEmailEmpty ? Colors.red : Colors.transparent,
+                            ),
                           ),
                           child: TextFormField(
                             controller: _passwordController,
-                            validator: (value) {
+                            /*validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Veuillez entre votre mot de passe';
                               }
                               return null;
-                            },
+                            },*/
                             style: ralewayStyle.copyWith(
                               fontWeight: FontWeight.w400,
                               color: appcolors.blueDarkColor,
@@ -196,26 +235,29 @@ class _loginpageversionState extends State<loginpageversion> {
                                   Positioned.fill(
                                     child: Container(
                                       decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: BorderRadius.circular(4),
+                                        border: Border.all(
+                                          width: 10,
                                           color: Colors.blue,
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          border: Border.all(
-                                            width: 10,
-                                            color: Colors.blue,
-                                          )),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   IconButton(
                                     onPressed: () {},
                                     icon: ColorFiltered(
                                       colorFilter: const ColorFilter.mode(
-                                          Colors.white, BlendMode.srcIn),
+                                        Colors.white,
+                                        BlendMode.srcIn,
+                                      ),
                                       child: Image.asset(AppIcons.lockIcon),
                                     ),
                                   ),
                                 ],
                               ),
-                              contentPadding: const EdgeInsets.only(top: 16.0),
+                              contentPadding:
+                                  const EdgeInsets.only(top: 16.0),
                               hintText: 'Enter Password',
                               hintStyle: ralewayStyle.copyWith(
                                 fontWeight: FontWeight.w400,
@@ -227,66 +269,88 @@ class _loginpageversionState extends State<loginpageversion> {
                         ),
                       ),
                       SizedBox(height: height * 0.05),
+                      Consumer<AuthenticationProvider>(
+                        builder: (context, auth, child) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            if (auth.resMessage != '') {
+                              showMessage(
+                                message: auth.resMessage,
+                                context: context,
+                              );
 
-          Consumer<AuthenticationProvider>(
-            builder: (context, auth, child) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (auth.resMessage != '') {
-                  showMessage(
-                      message: auth.resMessage, context: context);
+                              ///Clear the response message to avoid duplicate
+                              auth.clear();
+                            }
+                          });
+                          return Material(
+                            borderRadius: BorderRadius.circular(4.0),
+                            child: InkWell(
+                              onTap: () {
+                                if (_formKey.currentState!.validate()) {
+                                  if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+                                    showMessage(
+                                      message: "All fields are required",
+                                      context: context,
+                                    );
+                                  } else {
+                                    String enteredEmail = _emailController.text;
+                                    bool isNewEmail = !_emailList.contains(enteredEmail);
 
-                  ///Clear the response message to avoid duplicate
-                  auth.clear();
-                }
-              });
-              return Material(
-                borderRadius: BorderRadius.circular(4.0),
-                child: InkWell(
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      if (_emailController.text.isEmpty ||
-                          _passwordController.text.isEmpty) {
-                        showMessage(
-                            message: "All fields are required",
-                            context: context
-                        );
-                      } else {
-                        auth.loginUser(
-                            context: context,
-                            email: _emailController.text,
-                            password: _passwordController.text);
-                      }
-                    }
-                  },
-                  child: Center(
-                    child: Ink(
-                      height: 43,
-                      width: width / 4,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4.0),
-                        color: primaryColor,
+                                    setState(() {
+                                      _selectedEmail = enteredEmail;
+                                    });
+
+                                    if (isNewEmail) {
+                                      _emailList.add(enteredEmail);
+                                      _saveEmailList().then((_) {
+                                        // Save the updated email list
+                                        auth.loginUser(
+                                          context: context,
+                                          email: enteredEmail,
+                                          password: _passwordController.text,
+                                        );
+                                      });
+                                    } else {
+                                      auth.loginUser(
+                                        context: context,
+                                        email: enteredEmail,
+                                        password: _passwordController.text,
+                                      );
+                                    }
+                                  }
+                                }
+                              },
+                              child: Center(
+                                child: Ink(
+                                  height: 43,
+                                  width: width / 4,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4.0),
+                                    color: primaryColor,
+                                  ),
+                                  child: Center(
+                                    child: auth.isLoggingIn
+                                        ? const CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        appcolors.whiteColor,
+                                      ),
+                                    )
+                                        : Text(
+                                      'LOGIN',
+                                      style: ralewayStyle.copyWith(
+                                        fontWeight: FontWeight.w800,
+                                        color: appcolors.whiteColor,
+                                        fontSize: 15.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      child: Center(
-                        child: auth.isLoggingIn
-                            ? const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(appcolors.whiteColor))
-                            : Text(
-                          'LOGIN',
-                          style: ralewayStyle.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: appcolors.whiteColor,
-                            fontSize: 15.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-
-          // ... Rest of the UI code ...
-          Center(
+                      Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -300,7 +364,7 @@ class _loginpageversionState extends State<loginpageversion> {
                               width: 10,
                             ),
                             Image.asset(
-                              'assets/images/datamasterpetitlogo.png', // replace with your logo image path
+                              'assets/images/datamasterpetitlogo.png',
                               width: 100,
                               height: 100,
                             ),

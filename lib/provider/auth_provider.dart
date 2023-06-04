@@ -25,7 +25,7 @@ class AuthenticationProvider extends ChangeNotifier {
   String get resMessage => _resMessage;
 
   //Login
-  void loginUser({
+  Future<int?> loginUser({
     required String email,
     required String password,
     BuildContext? context,
@@ -87,19 +87,21 @@ class AuthenticationProvider extends ChangeNotifier {
             DatabaseProvider().saveToken(newToken);
           } else if (refreshReq.statusCode == 401) {
             // Refresh token is expired, perform a new login request
+            // ignore: use_build_context_synchronously
             loginUser(email: email, password: password, context: context);
           } else {
             // Refresh token failed, logout user
             DatabaseProvider().logOut(context!);
           }
         }
+          int? chcsiteid = await fetchCHCSITEID();
 
         http.Response sessionResponse = await http.post(
           Uri.parse('http://51.178.142.70:8010/DMERP/v1/Caisse/HisCaisse/'),
           headers: {'Authorization': 'Bearer $token'},
           body: {
             'CHCETAT': '0',
-            'CHCSITEID': '1',
+            'CHCSITEID': chcsiteid?.toString() ?? '' ,
             'CHCTERMID': '18',
             'CHCTINTR': '0',
             'CHCUTLID': userId,
@@ -137,7 +139,114 @@ class AuthenticationProvider extends ChangeNotifier {
 
       print(":::: $e");
     }
+    return null;
   }
+
+
+
+
+  Future<int?> fetchCHCSITEID() async {
+  try {
+    final String token = await DatabaseProvider().getToken();
+
+    http.Response response = await http.get(
+      Uri.parse('http://51.178.142.70:8010/DMERP/v1/Caisse/Terminal/18/'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final dynamic data = jsonDecode(response.body);
+      if (data.containsKey('site') && data['site'].containsKey('ID_ROWID')) {
+        final String chcsiteidStr = data['site']['ID_ROWID'].toString();
+        final int chcsiteid = int.parse(chcsiteidStr);
+        print(chcsiteid);
+        return chcsiteid;
+      } else {
+        print('CHCSITEID not found in response');
+      }
+    } else {
+      print('Failed to fetch CHCSITEID. Status code: ${response.statusCode}');
+    }
+  } on SocketException catch (_) {
+    print('Internet connection is not available');
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+
+  return null;
+}
+// Update User Data
+  // Update User Data
+Future<bool> updateUserData({
+  required String firstName,
+  required String anotherInput,
+  required String email,
+  required String phoneNumber,
+  String? photoBase64,
+  required BuildContext context,
+}) async {
+  _isLoading = true;
+  notifyListeners();
+
+  try {
+    final String token = await DatabaseProvider().getToken();
+
+    final Map<String, String> headers = {
+      'Authorization': 'Bearer $token',
+    };
+
+    final Map<String, dynamic> body = {
+      'username': anotherInput ?? '',
+      'first_name': firstName ?? '',
+      'last_name': phoneNumber ?? '',
+      'email': email ?? '',
+      'MUTETAT': 'true',
+      'MUTPHOTOS':  photoBase64,
+    };
+
+    final http.Response response = await http.put(
+      Uri.parse('http://51.178.142.70:8010/DMERP/v1/auth/user/'),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      // Update successful
+      _isLoading = false;
+      _resMessage = 'User data updated successfully';
+      notifyListeners();
+      return true;
+    } else if (response.statusCode == 401) {
+      // Unauthorized, token expired
+      // Handle token refresh or logout here
+    } else {
+      // Other error occurred
+      final res = json.decode(response.body);
+      _resMessage = res['message'];
+      _isLoading = false;
+      notifyListeners();
+    }
+  } on SocketException catch (_) {
+    _isLoading = false;
+    _resMessage = 'Internet connection is not available';
+    notifyListeners();
+  } catch (e) {
+    _isLoading = false;
+    _resMessage = 'Please try again';
+    notifyListeners();
+    print('Error: $e');
+  }
+
+  return false;
+}
+
+
+
+  // ..
+
 
   void clear() {
     _resMessage = "";

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/colors.dart';
 import '../constants/constants.dart';
+import '../provider/notification_provider.dart';
 
 class Header extends StatefulWidget {
   const Header({
@@ -23,6 +24,8 @@ class _HeaderState extends State<Header> {
   
   @override
   Widget build(BuildContext context) {
+      print("Building Ticketicon with toggleValue: ${Provider.of<ToggleProvider>(context).toggleValue}");
+
     return Container(
       margin: const EdgeInsets.only(bottom: appPadding),
       child: const Row(
@@ -210,9 +213,8 @@ class _TicketiconState extends State<Ticketicon> {
     },
   ),
 ),
-
 const SizedBox(width: 5,),
-        GestureDetector(
+       GestureDetector(
   onTap: () {
     showDialog(
       context: context,
@@ -232,29 +234,32 @@ const SizedBox(width: 5,),
       },
     );
   },
-   child: const CircleAvatar(
-  backgroundColor: appcolors.grey1,
-  radius:20,
-  child: Stack(
-    alignment: Alignment.center,
-    children: [
-      Icon(
-        Icons.notifications,
-        color: Colors.black,
-        size: 22,
+  child: Provider.of<ToggleProvider>(context).toggleValue
+    ? const CircleAvatar(
+      backgroundColor: appcolors.grey1,
+      radius:20,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Icon(
+            Icons.notifications,
+            color: Colors.black,
+            size: 22,
+          ),
+          Positioned(
+            top: 0,
+            right: 4,
+            child: CircleAvatar(
+              backgroundColor: Colors.red,
+              radius: 4,
+            ),
+          ),
+        ],
       ),
-      Positioned(
-        top: 0,
-        right: 4,
-        child: CircleAvatar(
-          backgroundColor: Colors.red,
-          radius: 4,
-        ),
-      ),
-    ],
-  ),
-)
+    )
+    : Container(), // Empty container if the value is false
 ),
+
 const SizedBox(width: 5,),
           GestureDetector(
           onTap: () async {

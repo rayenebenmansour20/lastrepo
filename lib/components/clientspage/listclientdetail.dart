@@ -46,7 +46,7 @@ class _ClientlisteDetailDataTableState extends State<ClientlisteDetailDataTable>
 
             DataCell(
               Text(
-                info.firstName! ?? 'N/A',
+                info.firstName!,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: textColor,

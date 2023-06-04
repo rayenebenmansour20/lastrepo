@@ -2,7 +2,6 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants/constants.dart';
@@ -436,16 +435,16 @@ void showEditDialog() {
   value: selectedTarif,
   items: const [
     DropdownMenuItem(
-      child: Text("VIP"),
       value: 1,
+      child: Text("VIP"),
     ),
     DropdownMenuItem(
-      child: Text("Passager"),
       value: 2,
+      child: Text("Passager"),
     ),
     DropdownMenuItem(
-      child: Text("Normal"),
       value: 3,
+      child: Text("Normal"),
     ),
   ],
   onChanged: (value) {

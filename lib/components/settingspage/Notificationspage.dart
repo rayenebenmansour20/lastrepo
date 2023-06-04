@@ -1,7 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:js';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stacked_notification_cards/stacked_notification_cards.dart';
+
+import '../../provider/notification_provider.dart';
 
 class Notificationspage extends StatefulWidget{
   const Notificationspage({Key? key}) : super(key: key);
@@ -9,10 +14,15 @@ class Notificationspage extends StatefulWidget{
   @override
   _NotificationspageState createState() => _NotificationspageState();
 }
+void toggleButton() {
+  Provider.of<ToggleProvider>(context as BuildContext, listen: false).toggle();
+}
+
 
 
 class _NotificationspageState extends State<Notificationspage> {
-  bool toggleValue = false;
+
+  bool toggleVal = false;
 
   final List<NotificationCard> _listOfNotification = [
     // your list items...
@@ -87,7 +97,7 @@ class _NotificationspageState extends State<Notificationspage> {
                   width: 100.0,
                   decoration: BoxDecoration (
                     borderRadius: BorderRadius.circular(20.0),
-                    color: toggleValue ? Colors.greenAccent[100] : Colors.redAccent[100]?.withOpacity(0.5),
+color: Provider.of<ToggleProvider>(context).toggleValue ? Colors.greenAccent[100] : Colors.redAccent[100]?.withOpacity(0.5),
                   ),
                   child: Stack (
                     children: <Widget>[
@@ -95,16 +105,18 @@ class _NotificationspageState extends State<Notificationspage> {
                         duration: const Duration(milliseconds: 1000),
                         curve: Curves.easeIn,
                         top: 3.0,
-                        left: toggleValue ? 60.0 : 0.0,
-                        right: toggleValue ? 0.0 : 60.0,
-                        child: InkWell(
-                          onTap: toggleButton,
-                          child: AnimatedSwitcher(
+                        left: toggleVal ? 60.0 : 0.0,
+                        right: toggleVal ? 0.0 : 60.0,
+                        child: GestureDetector(
+                          onTap: () {
+    Provider.of<ToggleProvider>(context, listen: false).toggle();
+  },
+                      child: AnimatedSwitcher(
                             duration: const Duration(milliseconds: 1000),
                             transitionBuilder: (Widget child, Animation<double> animation) {
-                              return ScaleTransition(child: child, scale: animation);
+                              return ScaleTransition(scale: animation, child: child);
                             },
-                            child: toggleValue ? Icon(Icons.check_circle, color: Colors.green, size: 35.0, key: UniqueKey()) :
+                           child: Provider.of<ToggleProvider>(context).toggleValue ? Icon(Icons.check_circle, color: Colors.green, size: 35.0, key: UniqueKey()) :
                             Icon(Icons.remove_circle_outline, color: Colors.red, size: 35.0, key: UniqueKey()),
                           ),
                         ),
@@ -167,7 +179,7 @@ class _NotificationspageState extends State<Notificationspage> {
 
   toggleButton(){
     setState(() {
-      toggleValue = !toggleValue;
+      toggleVal = !toggleVal;
     });
   }
 }

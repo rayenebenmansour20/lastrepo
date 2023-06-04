@@ -105,7 +105,7 @@ class _ProductCardsState extends State<ProductCards> {
     );
   }
 }
-var ID=0;
+int ID=0;
 List<ProductInfo> analyticData = [
   ProductInfo(
     title: "Produit 1",

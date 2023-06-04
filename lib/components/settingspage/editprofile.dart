@@ -1,10 +1,13 @@
-import 'dart:io';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:newapp/constants/constants.dart';
 import 'package:colours/colours.dart';
+import 'package:provider/provider.dart';
+
+import '../../provider/auth_provider.dart';
 
 class ProfileSettingsPage extends StatefulWidget {
   const ProfileSettingsPage({Key? key}) : super(key: key);
@@ -29,6 +32,27 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     _emailController = TextEditingController();
     _phoneNumberController = TextEditingController();
   }
+  void _saveProfileSettings() {
+    final provider = Provider.of<AuthenticationProvider>(context, listen: false);
+
+    final firstName = _firstNameController.text;
+    final anotherInput = _anotherInputController.text;
+    final email = _emailController.text;
+    final phoneNumber = _phoneNumberController.text;
+    String? photoBase64;
+  if (_selectedImageBytes != null) {
+    photoBase64 = base64Encode(_selectedImageBytes!);
+  }
+
+    provider.updateUserData(
+      firstName: firstName,
+      anotherInput: anotherInput,
+      email: email,
+      phoneNumber: phoneNumber,
+      photoBase64: photoBase64,
+      context: context,
+    );
+  }
 
   @override
   void dispose() {
@@ -39,16 +63,17 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     super.dispose();
   }
 
-   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      final bytes = await pickedImage.readAsBytes();
-      setState(() {
-        _selectedImageBytes = bytes;
-      });
-    }
+  Future<void> _pickImage() async {
+  final picker = ImagePicker();
+  final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+  if (pickedImage != null) {
+    final bytes = await pickedImage.readAsBytes();
+    setState(() {
+      _selectedImageBytes = bytes;
+    });
   }
+}
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +230,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                       children:[ 
               ElevatedButton(
               onPressed: () {
-                      // Handle button press here
+                      _saveProfileSettings();
               },
               style: ElevatedButton.styleFrom(
                 
@@ -255,3 +280,4 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     );
   }
 }
+

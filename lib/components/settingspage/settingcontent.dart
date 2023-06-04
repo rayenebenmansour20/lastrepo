@@ -7,7 +7,6 @@ import 'package:newapp/components/settingspage/profilepage.dart';
 
 import '../../constants/constants.dart';
 import 'editprofile.dart';
-import 'Notificationspage.dart';
 
 class SettingsContent extends StatefulWidget {
   const SettingsContent({Key? key}) : super(key: key);
@@ -150,7 +149,7 @@ class _SettingsContentState extends State<SettingsContent> {
                   },
                   itemBuilder: (context, index) {
                     if (index == 0) {
-                      return  UserProfile();
+                      return  const UserProfile();
                     } else if (index == 1) {
                       return const ProfileSettingsPage();
                     } else if  (index == 2) {
